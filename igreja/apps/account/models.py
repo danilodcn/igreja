@@ -2,7 +2,7 @@ from apps.account.managers import CustomUserManager
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from model_utils import Choices, FieldTracker
+from model_utils import FieldTracker
 
 
 class CustomUser(AbstractUser):
@@ -18,7 +18,10 @@ class CustomUser(AbstractUser):
         return self.get_full_name()
 
     def get_full_name(self):
-        return "{} {}".format(self.first_name.strip(), self.last_name.strip())
+        return "{} {}".format(
+            self.first_name.strip(),
+            self.last_name.strip(),
+        )
 
     def on_create_user(self):
         address = Address.objects.create()
@@ -81,7 +84,10 @@ class Address(models.Model):
         verbose_name_plural = _("Addresses")
 
     country = models.CharField(
-        max_length=50, verbose_name=_("Country"), blank=True, null=True
+        max_length=50,
+        verbose_name=_("Country"),
+        blank=True,
+        null=True,
     )
     state = models.CharField(
         max_length=2,
@@ -91,22 +97,40 @@ class Address(models.Model):
         null=True,
     )
     city = models.CharField(
-        max_length=50, verbose_name=_("City"), blank=True, null=True
+        max_length=50,
+        verbose_name=_("City"),
+        blank=True,
+        null=True,
     )
     zipcode = models.CharField(
-        max_length=30, verbose_name=_("Zip Code"), blank=True, null=True
+        max_length=30,
+        verbose_name=_("Zip Code"),
+        blank=True,
+        null=True,
     )
     street = models.CharField(
-        max_length=100, verbose_name=_("Street"), blank=True, null=True
+        max_length=100,
+        verbose_name=_("Street"),
+        blank=True,
+        null=True,
     )
     complement = models.CharField(
-        max_length=100, verbose_name=_("Complement"), blank=True, null=True
+        max_length=100,
+        verbose_name=_("Complement"),
+        blank=True,
+        null=True,
     )
     number = models.CharField(
-        max_length=30, verbose_name=_("Number"), blank=True, null=True
+        max_length=30,
+        verbose_name=_("Number"),
+        blank=True,
+        null=True,
     )
     neighborhood = models.CharField(
-        max_length=100, verbose_name=_("Neighborhood"), blank=True, null=True
+        max_length=100,
+        verbose_name=_("Neighborhood"),
+        blank=True,
+        null=True,
     )
     address_type = models.CharField(
         max_length=100,
@@ -121,7 +145,10 @@ class Address(models.Model):
 
     def __str__(self):
         return "{}, {}, {}/{}".format(
-            self.street, self.number, self.city, self.get_state_display()
+            self.street,
+            self.number,
+            self.city,
+            self.get_state_display(),
         )
 
 
@@ -134,7 +161,11 @@ class Profile(models.Model):
         null=True,
     )
     address = models.OneToOneField(
-        Address, models.CASCADE, related_name="profile", null=True, blank=True
+        Address,
+        models.CASCADE,
+        related_name="profile",
+        null=True,
+        blank=True,
     )
 
     GENDER_CHOICES = (
@@ -165,23 +196,53 @@ class Profile(models.Model):
     tracker = FieldTracker()
 
     gender = models.IntegerField(
-        verbose_name="Sexo", choices=GENDER_CHOICES, default=2, blank=True, null=True
+        verbose_name="Sexo",
+        choices=GENDER_CHOICES,
+        default=2,
+        blank=True,
+        null=True,
     )
 
-    cpf = models.CharField(max_length=14, verbose_name=_("CPF"), blank=True, null=True)
-    cnh = models.CharField(max_length=14, verbose_name=_("CNH"), blank=True, null=True)
-    rg = models.CharField(max_length=40, verbose_name=_("RG"), blank=True, null=True)
+    cpf = models.CharField(
+        max_length=14,
+        verbose_name=_("CPF"),
+        blank=True,
+        null=True,
+    )
+    cnh = models.CharField(
+        max_length=14,
+        verbose_name=_("CNH"),
+        blank=True,
+        null=True,
+    )
+    rg = models.CharField(
+        max_length=40,
+        verbose_name=_("RG"),
+        blank=True,
+        null=True,
+    )
     phone = models.CharField(
-        max_length=17, verbose_name=_("Phone"), blank=True, null=True
+        max_length=17,
+        verbose_name=_("Phone"),
+        blank=True,
+        null=True,
     )
     income_bracket = models.CharField(
-        max_length=200, verbose_name="Faixa de renda", blank=True, null=True
+        max_length=200,
+        verbose_name="Faixa de renda",
+        blank=True,
+        null=True,
     )
     occupation = models.CharField(
-        max_length=100, verbose_name="Profissão", blank=True, null=True
+        max_length=100,
+        verbose_name="Profissão",
+        blank=True,
+        null=True,
     )
     birth_date = models.DateField(
-        blank=True, null=True, verbose_name="Data de Nascimento"
+        blank=True,
+        null=True,
+        verbose_name="Data de Nascimento",
     )
     phone_type = models.CharField(
         max_length=100,
@@ -198,19 +259,27 @@ class Profile(models.Model):
         null=True,
     )
     emitting_organ = models.CharField(
-        max_length=100, verbose_name=_("Orgão Emissor"), blank=True, null=True
+        max_length=100,
+        verbose_name=_("Orgão Emissor"),
+        blank=True,
+        null=True,
     )
     expedition_date = models.DateField(
-        verbose_name=_("Data de Expedição"), blank=True, null=True
+        verbose_name=_("Data de Expedição"),
+        blank=True,
+        null=True,
     )
     email_message_enabled = models.BooleanField(
-        verbose_name=_("Aceitar e-mails para comunicação?"), default=False
+        verbose_name=_("Aceitar e-mails para comunicação?"),
+        default=False,
     )
     phone_message_enabled = models.BooleanField(
-        verbose_name=_("Aceitar comunicação de celular"), default=False
+        verbose_name=_("Aceitar comunicação de celular"),
+        default=False,
     )
     is_main_contact = models.BooleanField(
-        verbose_name=_("Is Main Contact"), default=False
+        verbose_name=_("Is Main Contact"),
+        default=False,
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
