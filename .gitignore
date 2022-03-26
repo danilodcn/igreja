@@ -3,7 +3,9 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=django
 
 ### Django ###
-migrations      # remove it where project in production 
+# remove it where project in production
+igreja/apps/*/migrations/* 
+
 *.log
 *.pot
 *.pyc
