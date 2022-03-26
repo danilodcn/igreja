@@ -8,6 +8,7 @@ authors = ["Danilo da Conceição Nascimento <daconnas.dcn@gmail.com>"]
 python = "^3.9"
 django-registration = "^3.2"
 Django = "^4.0.3"
+django-model-utils = "^4.2.0"
 
 [tool.poetry.dev-dependencies]
 ipdb = "^0.13.9"
