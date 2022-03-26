@@ -4,7 +4,7 @@
 
 ### Django ###
 # remove it where project in production
-igreja/apps/*/migrations/* 
+igreja/apps/*/migrations/*
 
 *.log
 *.pot
