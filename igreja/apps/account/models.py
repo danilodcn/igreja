@@ -18,14 +18,28 @@ class CustomUser(AbstractUser):
         return self.get_full_name()
 
     def get_full_name(self):
-        return "{} {}".format(
-            self.first_name.strip(),
-            self.last_name.strip(),
-        )
+        first_name = self.first_name.strip()
+        last_name = self.last_name.strip()
+
+        return "{} {}".format(first_name, last_name).strip()
+
+    def save(self, *args, **kwargs):
+        user = super().save(*args, **kwargs)
+        self.on_create_user()
+        return user
 
     def on_create_user(self):
-        address = Address.objects.create()
-        Profile.objects.create(user=self, address=address)
+        try:
+            profile: Profile = self.profile
+
+            if not profile.address:
+                address = Address.objects.create()
+                profile.address = address
+                profile.save()
+
+        except Profile.DoesNotExist:
+            address = Address.objects.create()
+            Profile.objects.create(user=self, address=address)
 
 
 class Address(models.Model):
@@ -153,21 +167,6 @@ class Address(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(
-        CustomUser,
-        on_delete=models.CASCADE,
-        related_name="profile",
-        blank=True,
-        null=True,
-    )
-    address = models.OneToOneField(
-        Address,
-        models.CASCADE,
-        related_name="profile",
-        null=True,
-        blank=True,
-    )
-
     GENDER_CHOICES = (
         (0, _("Male")),
         (1, _("Female")),
@@ -194,6 +193,21 @@ class Profile(models.Model):
     )
 
     tracker = FieldTracker()
+    user = models.OneToOneField(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name="profile",
+        blank=True,
+        null=True,
+    )
+
+    address = models.OneToOneField(
+        Address,
+        models.CASCADE,
+        related_name="profile",
+        null=True,
+        blank=True,
+    )
 
     gender = models.IntegerField(
         verbose_name="Sexo",
