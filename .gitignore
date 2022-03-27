@@ -1,10 +1,8 @@
-
-# Created by https://www.toptal.com/developers/gitignore/api/django
-# Edit at https://www.toptal.com/developers/gitignore?templates=django
+igreja/apps/*/migrations/*
+igreja/static
 
 ### Django ###
 # remove it where project in production
-igreja/apps/*/migrations/*
 
 *.log
 *.pot
