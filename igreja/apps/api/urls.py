@@ -1,7 +1,7 @@
 from django.urls import include, path
 
-from .routers import account_router
+from .routers import router
 
 urlpatterns = [
-    path("account/", include(account_router.urls)),
+    path("", include(router.urls)),
 ]
