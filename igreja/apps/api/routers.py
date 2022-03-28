@@ -1,8 +1,11 @@
 from rest_framework import routers
 
-from .views import CreateUserViewSet, ListUserViewSet
+from .views import BlogViewSet, CreateUserViewSet, ListUserViewSet
 
-account_router = routers.DefaultRouter()
+router = routers.DefaultRouter()
 
-account_router.register("user/create", CreateUserViewSet, basename="create")
-account_router.register("user/list", ListUserViewSet)
+router.register("user/create", CreateUserViewSet, basename="create")
+router.register("user/list", ListUserViewSet)
+
+
+router.register("blog", BlogViewSet)
