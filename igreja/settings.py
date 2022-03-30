@@ -76,7 +76,7 @@ REST_FRAMEWORK = {
     ],
 }
 
-WSGI_APPLICATION = "wsgi.application"
+WSGI_APPLICATION = "igreja.wsgi.application"
 
 AUTH_USER_MODEL = "account.CustomUser"
 
