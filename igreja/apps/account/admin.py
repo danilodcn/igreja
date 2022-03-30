@@ -1,7 +1,5 @@
 from apps.account.models import Address, CustomUser, Profile
 from django.contrib import admin
-from django.http.response import JsonResponse
-from django.urls import path
 
 
 class AddressAdmin(admin.ModelAdmin):

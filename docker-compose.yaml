@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  app:
+    image: igreja
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes: 
+      - ".:/app"
+    # network_mode: "host"
+    ports:
+      - 8080:8080
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_NAME=postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - dbdata-igreja:/var/lib/postgresql/data
+
+  broker:
+    image: rabbitmq:alpine
+    ports:
+      - 5672:5672
+
+volumes:
+  dbdata-igreja:
