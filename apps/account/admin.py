@@ -1,5 +1,5 @@
-from apps.account.models import Address, CustomUser, Profile
 from django.contrib import admin
+from apps.account.models import Address, CustomUser, Profile
 
 
 class AddressAdmin(admin.ModelAdmin):
