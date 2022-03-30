@@ -1,5 +1,4 @@
 .secrets.*
-apps/*/migrations/*
 static/
 .vscode
 ### Django ###
