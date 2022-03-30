@@ -1,6 +1,9 @@
 import os
 from decouple import config, Csv
 from dj_database_url import parse
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -138,3 +141,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_FILENAME_GENERATOR = "apps.core.utils.get_filename"
+
+# Sentry sdk configs
+sentry_sdk.init(
+    dsn=config("SENTRY_DNS"),
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+    environment=config("SENTRY_ENV")
+) 
