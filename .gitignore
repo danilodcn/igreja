@@ -1,3 +1,4 @@
+.secrets.*
 igreja/apps/*/migrations/*
 igreja/static
 .vscode
@@ -166,3 +167,4 @@ cython_debug/
 #.idea/
 
 # End of https://www.toptal.com/developers/gitignore/api/django
+# Ignore dynaconf secret files
