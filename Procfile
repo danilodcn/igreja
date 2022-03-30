@@ -1,1 +1,1 @@
-gunicorn igreja.wsgi 
+web: gunicorn igreja.wsgi
