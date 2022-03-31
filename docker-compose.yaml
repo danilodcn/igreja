@@ -10,7 +10,7 @@ services:
       - ".:/app"
     # network_mode: "host"
     ports:
-      - 8080:8080
+      - 8020:8020
 
   db:
     image: postgres
@@ -21,7 +21,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - dbdata-igreja:/var/lib/postgresql/data
+      - igreja:/var/lib/postgresql/data
 
   broker:
     image: rabbitmq:alpine
@@ -29,4 +29,4 @@ services:
       - 5672:5672
 
 volumes:
-  dbdata-igreja:
+  igreja:
