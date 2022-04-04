@@ -1,5 +1,5 @@
-from django.views.generic import TemplateView
+from django.shortcuts import redirect
 
 
-class HomePageView(TemplateView):
-    template_name = "index.html"
+def home(request):
+    return redirect("/admin")

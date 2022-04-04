@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.utils.translation import gettext_lazy as _
-from apps.core.views import HomePageView
+from apps.core.views import home
 
 CONFIG_URLS = [
     path("admin/", admin.site.urls),
@@ -20,7 +20,8 @@ if settings.DEBUG:
 APPS_URLS = [
     path("accounts/", include("apps.account.urls")),
     path("api/", include("apps.api.urls")),
-    path("", HomePageView.as_view(), name="home")
+    path("", home, name="home"),
+    # path(r'', include('feincms.urls')),
 ]
 
 
