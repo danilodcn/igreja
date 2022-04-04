@@ -9,7 +9,8 @@ ENV \
     PYTHONHASHSEED=random \
     PIP_NO_CACHE_DIR=off \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
-    PIP_DEFAULT_TIMEOUT=100
+    PIP_DEFAULT_TIMEOUT=100 \
+    PYTHONDONTWRITEBYTECODE=1
 
 RUN apt update && apt install libpq-dev gcc make libjpeg-dev curl git -y
 
