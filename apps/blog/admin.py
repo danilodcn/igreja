@@ -25,17 +25,14 @@ class PostAdmin(admin.ModelAdmin):
         "publish_date",
     )
     list_editable = (
-        "title",
-        "subtitle",
         "slug",
-        "publish_date",
         "published",
     )
     search_fields = (
         "title",
         "subtitle",
         "slug",
-        "body",
+        "content",
     )
     prepopulated_fields = {
         "slug": (
@@ -45,3 +42,49 @@ class PostAdmin(admin.ModelAdmin):
     }
     date_hierarchy = "publish_date"
     save_on_top = True
+    readonly_fields = [
+        "get_published",
+        "status",
+        "publish_date",
+        "author",
+        "reviewed_by",
+        "review_date",
+    ]
+    filter_horizontal = ["categories"]
+
+    def get_fieldsets(self, request, obj=...):
+        fields = (
+            (
+                None,
+                {
+                    "fields": (
+                        "status",
+                        "title",
+                        "slug",
+                        "subtitle",
+                        "categories",
+                    )
+                },
+            ),
+            ("Conteúdo", {"fields": ("content", "document", "image")}),
+            (
+                "Publicação",
+                {
+                    "classes": ("collapse",),
+                    "fields": (
+                        "get_published",
+                        "publish_date",
+                        "author",
+                        "reviewed_by",
+                        "review_date",
+                    ),
+                },
+            ),
+        )
+        return fields
+
+    @admin.display(boolean=True)
+    def get_published(self, obj):
+        return obj.published
+
+    get_published.short_description = "Publicado"
