@@ -1,5 +1,6 @@
-from apps.account.models import Address, CustomUser, Profile
 from rest_framework import serializers
+
+from apps.account.models import Address, CustomUser, Profile
 
 
 class AddressSerializer(serializers.ModelSerializer):

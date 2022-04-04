@@ -1,10 +1,10 @@
 import os
 from pathlib import Path
-from decouple import config, Csv
-from dj_database_url import parse
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 
+import sentry_sdk
+from decouple import Csv, config
+from dj_database_url import parse
+from sentry_sdk.integrations.django import DjangoIntegration
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

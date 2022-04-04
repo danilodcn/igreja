@@ -1,8 +1,9 @@
-from apps.account.models import CustomUser
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from model_utils import Choices
+
+from apps.account.models import CustomUser
 
 
 class Category(models.Model):
