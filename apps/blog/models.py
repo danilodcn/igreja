@@ -84,7 +84,14 @@ class Reviews(models.Model):
     post = models.ForeignKey(
         Post, on_delete=models.CASCADE, related_name="posts"
     )
-
+    review_by = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        verbose_name="Revisado por",
+        related_name="reviews",
+        null=True,
+        blank=True,
+    )
     review_date = models.DateTimeField(
         "Data de revisão", blank=True, null=True
     )
