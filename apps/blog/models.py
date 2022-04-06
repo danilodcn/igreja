@@ -95,17 +95,22 @@ class Reviews(models.Model):
     review_date = models.DateTimeField(
         "Data de revisão", blank=True, null=True
     )
-
+    title = models.CharField(
+        verbose_name="Título", max_length=100, null=True, blank=False
+    )
     comment = models.TextField(
         "Comentário",
-        max_length=200,
-        help_text="Comentário com até 200 caracteres",
+        max_length=500,
+        help_text="Comentário com até 500 caracteres",
     )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["-review_date"]
         verbose_name = "Revisão"
         verbose_name_plural = "Revisões"
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self) -> str:
+        return self.title
