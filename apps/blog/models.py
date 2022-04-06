@@ -15,6 +15,10 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = "Categoria"
+        verbose_name_plural = "Categorias"
+
 
 class Post(models.Model):
     NEW = 0
@@ -50,10 +54,6 @@ class Post(models.Model):
     publish_date = models.DateTimeField(
         "Data de publicação", blank=True, null=True
     )
-    review_date = models.DateTimeField(
-        "Data de revisão", blank=True, null=True
-    )
-    published = models.BooleanField("Publicado", default=False)
 
     author = models.ForeignKey(
         CustomUser,
@@ -63,14 +63,7 @@ class Post(models.Model):
         null=True,
         blank=True,
     )
-    reviewed_by = models.ForeignKey(
-        CustomUser,
-        on_delete=models.PROTECT,
-        verbose_name="Revisado por",
-        related_name="reviews",
-        null=True,
-        blank=True,
-    )
+
     categories = models.ManyToManyField(
         Category, related_name="posts", blank=True, verbose_name="Categorias"
     )
@@ -80,6 +73,32 @@ class Post(models.Model):
 
     class Meta:
         ordering = ["-publish_date"]
+        verbose_name = "Publicação"
+        verbose_name_plural = "Publicações"
 
     def __str__(self) -> str:
-        return "Post - {}".format(self.title)
+        return "{}".format(self.title).strip()
+
+
+class Reviews(models.Model):
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name="posts"
+    )
+
+    review_date = models.DateTimeField(
+        "Data de revisão", blank=True, null=True
+    )
+
+    comment = models.TextField(
+        "Comentário",
+        max_length=200,
+        help_text="Comentário com até 200 caracteres",
+    )
+
+    class Meta:
+        ordering = ["-review_date"]
+        verbose_name = "Revisão"
+        verbose_name_plural = "Revisões"
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
