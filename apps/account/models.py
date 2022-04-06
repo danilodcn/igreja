@@ -94,7 +94,7 @@ class Address(models.Model):
     )
 
     class Meta:
-        db_table = "core_address"
+        db_table = "account_address"
         verbose_name = "Endereço"
         verbose_name_plural = "Endereços"
 
