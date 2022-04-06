@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 from model_utils import FieldTracker
 
 from apps.account.managers import CustomUserManager
@@ -8,7 +7,7 @@ from apps.account.managers import CustomUserManager
 
 class CustomUser(AbstractUser):
     username = None
-    email = models.EmailField(_("email address"), unique=True)
+    email = models.EmailField("Endereço de email", unique=True)
     bio = models.TextField(null=True, blank=True)
 
     USERNAME_FIELD = "email"
@@ -96,62 +95,62 @@ class Address(models.Model):
 
     class Meta:
         db_table = "core_address"
-        verbose_name = _("Address")
-        verbose_name_plural = _("Addresses")
+        verbose_name = "Endereço"
+        verbose_name_plural = "Endereços"
 
     country = models.CharField(
         max_length=50,
-        verbose_name=_("Country"),
+        verbose_name="País",
         blank=True,
         null=True,
     )
     state = models.CharField(
         max_length=2,
-        verbose_name=_("State"),
+        verbose_name="Estado",
         choices=[(v[0], v[0]) for v in STATE_CHOICES],
         blank=True,
         null=True,
     )
     city = models.CharField(
         max_length=50,
-        verbose_name=_("City"),
+        verbose_name="Cidade",
         blank=True,
         null=True,
     )
     zipcode = models.CharField(
         max_length=30,
-        verbose_name=_("Zip Code"),
+        verbose_name="CEP",
         blank=True,
         null=True,
     )
     street = models.CharField(
         max_length=100,
-        verbose_name=_("Street"),
+        verbose_name="Rua",
         blank=True,
         null=True,
     )
     complement = models.CharField(
         max_length=100,
-        verbose_name=_("Complement"),
+        verbose_name="Complemento",
         blank=True,
         null=True,
     )
     number = models.CharField(
         max_length=30,
-        verbose_name=_("Number"),
+        verbose_name="Número",
         blank=True,
         null=True,
     )
     neighborhood = models.CharField(
         max_length=100,
-        verbose_name=_("Neighborhood"),
+        verbose_name="Bairro",
         blank=True,
         null=True,
     )
     address_type = models.CharField(
         max_length=100,
         choices=ADDRESS_TYPE_CHOICES,
-        verbose_name=_("Address Type"),
+        verbose_name="Tipo de endereço",
         blank=True,
         null=True,
     )
@@ -160,36 +159,31 @@ class Address(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
+        default = "---"
         return "{}, {}, {}/{}".format(
-            self.street,
-            self.number,
-            self.city,
-            self.get_state_display(),
+            self.street or default,
+            self.number or default,
+            self.city or default,
+            self.get_state_display() or default,
         )
 
 
 class Profile(models.Model):
     GENDER_CHOICES = (
-        (0, _("Male")),
-        (1, _("Female")),
+        (0, "Homem"),
+        (1, "Mulher"),
         (2, "-"),
     )
 
-    PEP_CHOICES = (
-        ("True", _("True")),
-        ("False", _("False")),
-        ("Relationship", _("Close relationship")),
-    )
-
     PHONE_CHOICES = (
-        ("residential", _("RESIDENCIAL")),
-        ("commercial", _("COMERCIAL")),
+        ("residential", "RESIDENCIAL"),
+        ("commercial", "COMERCIAL"),
         ("cellphone", "CELULAR"),
     )
 
     MARITAL_STATUS_CHOICES = (
-        ("single", _("SOLTEIRO")),
-        ("married", _("CASADO")),
+        ("single", "SOLTEIRO"),
+        ("married", "CASADO"),
         ("widower", "VIUVO"),
         ("divorced", "DIVORCIADO"),
     )
@@ -221,25 +215,25 @@ class Profile(models.Model):
 
     cpf = models.CharField(
         max_length=14,
-        verbose_name=_("CPF"),
+        verbose_name="CPF",
         blank=True,
         null=True,
     )
     cnh = models.CharField(
         max_length=14,
-        verbose_name=_("CNH"),
+        verbose_name="CNH",
         blank=True,
         null=True,
     )
     rg = models.CharField(
         max_length=40,
-        verbose_name=_("RG"),
+        verbose_name="RG",
         blank=True,
         null=True,
     )
     phone = models.CharField(
         max_length=17,
-        verbose_name=_("Phone"),
+        verbose_name="Telefone",
         blank=True,
         null=True,
     )
@@ -263,38 +257,38 @@ class Profile(models.Model):
     phone_type = models.CharField(
         max_length=100,
         choices=PHONE_CHOICES,
-        verbose_name=_("Tipo de Telefone"),
+        verbose_name="Tipo de Telefone",
         blank=True,
         null=True,
     )
     marital_status = models.CharField(
         max_length=100,
         choices=MARITAL_STATUS_CHOICES,
-        verbose_name=_("Estado Civil"),
+        verbose_name="Estado Civil",
         blank=True,
         null=True,
     )
     emitting_organ = models.CharField(
         max_length=100,
-        verbose_name=_("Orgão Emissor"),
+        verbose_name="Orgão Emissor",
         blank=True,
         null=True,
     )
     expedition_date = models.DateField(
-        verbose_name=_("Data de Expedição"),
+        verbose_name="Data de Expedição",
         blank=True,
         null=True,
     )
     email_message_enabled = models.BooleanField(
-        verbose_name=_("Aceitar e-mails para comunicação?"),
+        verbose_name="Aceitar e-mails para comunicação?",
         default=False,
     )
     phone_message_enabled = models.BooleanField(
-        verbose_name=_("Aceitar comunicação de celular"),
+        verbose_name="Aceitar comunicação de celular",
         default=False,
     )
     is_main_contact = models.BooleanField(
-        verbose_name=_("Is Main Contact"),
+        verbose_name="É o contato principal",
         default=False,
     )
 
