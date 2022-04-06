@@ -6,12 +6,15 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('account', '0002_alter_address_options_alter_address_address_type_and_more'),
+        (
+            "account",
+            "0002_alter_address_options_alter_address_address_type_and_more",
+        ),
     ]
 
     operations = [
         migrations.AlterModelTable(
-            name='address',
-            table='account_address',
+            name="address",
+            table="account_address",
         ),
     ]
