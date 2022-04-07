@@ -93,7 +93,7 @@ class Reviews(models.Model):
         blank=True,
     )
     review_date = models.DateTimeField(
-        "Data de revisão", blank=True, null=True
+        "Data de revisão", blank=True, null=True, auto_now_add=True
     )
     title = models.CharField(
         verbose_name="Título", max_length=100, null=True, blank=False
@@ -113,4 +113,6 @@ class Reviews(models.Model):
         verbose_name_plural = "Revisões"
 
     def __str__(self) -> str:
-        return self.title
+        if not self.title:
+            return ""
+        return str(self.title)
