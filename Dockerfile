@@ -1,5 +1,4 @@
-FROM python:3.9-buster
-
+FROM python:3.9.12-alpine3.15
 
 EXPOSE 8000
 
@@ -12,17 +11,18 @@ ENV \
     PIP_DEFAULT_TIMEOUT=100 \
     PYTHONDONTWRITEBYTECODE=1
 
-RUN apt update && apt install libpq-dev gcc make libjpeg-dev curl git -y
+RUN apk update
+RUN apk add --no-cache busybox-extras bash \
+    openssh jpeg-dev postgresql-dev \
+    postgresql-dev gcc musl-dev \
+    alpine-sdk libffi-dev libcurl curl-dev
 
-RUN apt-get autoremove -y \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk add --virtual .build-deps
 
 RUN pip install -U pip && pip install poetry
 
-RUN mkdir /app
-
 WORKDIR /app
+
 
 COPY pyproject.toml poetry.lock /app/
 

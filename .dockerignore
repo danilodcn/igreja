@@ -1,5 +1,5 @@
 .secrets.*
-
+pgdata/
 .git
 .ipynb_checkpoints/*
 /notebooks/*
