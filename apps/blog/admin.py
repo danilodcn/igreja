@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.db.models.query import QuerySet
 from django.http import HttpRequest
 from django.utils import timezone
+from ordered_model.admin import OrderedModelAdmin
 
 from .models import Category, Post, Reviews
 
@@ -9,7 +10,7 @@ from .models import Category, Post, Reviews
 class PostsInline(admin.TabularInline):
     model = Post.categories.through
     # template = "blog/inline/tabular.html"
-    readonly_fields = ["post", "get_status", "get_published"]
+    readonly_fields = ["post", "get_status", "get_published", "get_author"]
     autocomplete_fields = [
         "post",
     ]
@@ -25,6 +26,7 @@ class PostsInline(admin.TabularInline):
                 {
                     "fields": (
                         "post",
+                        "get_author",
                         "get_status",
                         "get_published",
                     )
@@ -51,14 +53,23 @@ class PostsInline(admin.TabularInline):
 
     get_title.short_description = "Título"
 
-    @admin.display(boolean=True)
-    def get_published(self, obj):
+    def get_author(self, obj):
         if obj.post:
-            return obj.post.published
+            return obj.post.author
 
-        return False
+        return "-"
 
-    get_published.short_description = "Publicado"
+    get_author.short_description = "Autor"
+
+    def get_published(self, obj):
+        default = " - "
+        if obj.post:
+            post: Post = obj.post
+            return post.publish_date or default
+
+        return default
+
+    get_published.short_description = "Data de publicação"
 
     def has_add_permission(self, request: HttpRequest, obj=None) -> bool:
         return False
@@ -68,15 +79,20 @@ class PostsInline(admin.TabularInline):
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(OrderedModelAdmin):
     model = Category
     list_display = [
         "__str__",
         "get_publish_number",
         "get_awaiting_for_published_number",
         "get_writing_number",
+        "active",
+        "move_up_down_links",
     ]
     inlines = [PostsInline]
+    ordering = [
+        "order",
+    ]
 
     def get_publish_number(self, obj: Category):
         return obj.posts.filter(status=Post.PUBLISHED).count()
@@ -123,6 +139,7 @@ class PostAdmin(admin.ModelAdmin):
 
     list_display = (
         "title",
+        "status",
         "slug",
         "publish_date",
         "get_published",
@@ -145,8 +162,9 @@ class PostAdmin(admin.ModelAdmin):
             "subtitle",
         )
     }
-    date_hierarchy = "publish_date"
+    # date_hierarchy = "publish_date"
     save_on_top = True
+    list_per_page = 50
     readonly_fields = [
         "get_published",
         "status",

@@ -3,14 +3,13 @@ from django.contrib.auth.admin import UserAdmin
 from django.http import HttpRequest
 
 from apps.account.models import Address, CustomUser, Profile
+from apps.church.admin import MemberAminInline
 
 
 class AddressAdmin(admin.ModelAdmin):
-    list_filter = ["id"]
-    search_fields = ["id"]
-
-    def has_view_permission(self, request: HttpRequest, obj=None):
-        return True
+    list_filter = ["state", "address_type"]
+    search_fields = ["city", "state", "zipcode", "country"]
+    list_per_page = 50
 
 
 class ProfileAdminInline(admin.StackedInline):
@@ -24,8 +23,9 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = [
         "groups",
     ]
-    inlines = [ProfileAdminInline]
+    inlines = [ProfileAdminInline, MemberAminInline]
     filter_horizontal = ["groups", "user_permissions"]
+    search_fields = ["first_name", "last_name"]
 
 
 admin.site.register(Address, AddressAdmin)
