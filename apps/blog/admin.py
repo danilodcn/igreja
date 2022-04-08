@@ -78,7 +78,6 @@ class PostsInline(admin.TabularInline):
         return super().get_field_queryset(db, db_field, request)
 
 
-@admin.register(Category)
 class CategoryAdmin(OrderedModelAdmin):
     model = Category
     list_display = [
@@ -131,7 +130,6 @@ def make_published(modeladmin, request: HttpRequest, queryset: QuerySet):
     queryset.update(status=Post.PUBLISHED, publish_date=timezone.now())
 
 
-@admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     model = Post
     actions = [make_published]
@@ -239,3 +237,14 @@ class PostAdmin(admin.ModelAdmin):
             return request.user == obj.author
 
         return request.user.is_superuser
+
+
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Post, PostAdmin)
+
+
+class Site(admin.AdminSite):
+    ...
+
+
+# admin.site.register()
