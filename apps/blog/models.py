@@ -1,16 +1,17 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from model_utils import Choices
+from ordered_model.models import OrderedModel
 
 from apps.account.models import CustomUser
 
 
-class Category(models.Model):
+class Category(OrderedModel):
     name = models.CharField(max_length=50, unique=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    active = models.BooleanField("Ativo", default=False)
 
     def __str__(self):
         return self.name
@@ -18,6 +19,7 @@ class Category(models.Model):
     class Meta:
         verbose_name = "Categoria"
         verbose_name_plural = "Categorias"
+        ordering = ["order"]
 
 
 class Post(models.Model):
