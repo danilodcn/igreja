@@ -12,6 +12,7 @@ CONFIG_URLS = [
         "api-auth/", include("rest_framework.urls", namespace="rest_framework")
     ),
     path(r"?P<ckeditor/", include("ckeditor_uploader.urls")),
+    path("doc/", include("django.contrib.admindocs.urls")),
 ]
 if settings.DEBUG:
     CONFIG_URLS += static(
