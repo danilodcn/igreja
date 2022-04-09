@@ -11,7 +11,7 @@ CONFIG_URLS = [
     path(
         "api-auth/", include("rest_framework.urls", namespace="rest_framework")
     ),
-    path('api/auth', include('dj_rest_auth.urls')),
+    path("o/", include("oauth2_provider.urls", namespace="oauth2_provider")),
     path(r"?P<ckeditor/", include("ckeditor_uploader.urls")),
     path("doc/", include("django.contrib.admindocs.urls")),
 ]

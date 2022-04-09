@@ -33,19 +33,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_admin_multiple_choice_list_filter",
+    "oauth2_provider",
     "rest_framework",
-    'rest_framework.authtoken',
-    'dj_rest_auth',
-    'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'dj_rest_auth.registration',
+    "rest_framework.authtoken",
     "django_extensions",
     "ordered_model",
     "ckeditor",
     "ckeditor_uploader",
-    
     # My apps
     "apps.blog",
     "apps.account",
@@ -58,11 +52,13 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+    "oauth2_provider.middleware.OAuth2TokenMiddleware",
+    # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "igreja.urls"
@@ -87,15 +83,19 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
+        # "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
+        "oauth2_provider.contrib.rest_framework.OAuth2Authentication",
     ],
 }
 
 WSGI_APPLICATION = "igreja.wsgi.application"
 
-AUTH_USER_MODEL = "custom_account.CustomUser"
+AUTH_USER_MODEL = "account.CustomUser"
 
 SITE_ID = 1
+
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -151,6 +151,20 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_FILENAME_GENERATOR = "apps.core.utils.get_filename"
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Link', 'Unlink'],
+            ['RemoveFormat', 'Source']
+        ]
+    },
+    'awesome_ckeditor': {
+        'toolbar': 'Basic',
+    },
+}
 
 # Sentry sdk configs
 sentry_sdk.init(
@@ -168,9 +182,3 @@ AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
 
 AWS_QUERYSTRING_EXPIRE = config("AWS_QUERYSTRING_EXPIRE", 24 * 60 * 60)
-
-
-GEOPOSITION_MAP_OPTIONS = {
-    "minZoom": 15,
-    "maxZoom": 18,
-}
