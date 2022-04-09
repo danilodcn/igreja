@@ -34,10 +34,19 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_admin_multiple_choice_list_filter",
     "rest_framework",
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth.registration',
     "django_extensions",
     "ordered_model",
     "ckeditor",
     "ckeditor_uploader",
+    
+    # My apps
     "apps.blog",
     "apps.account",
     "apps.core",
@@ -84,7 +93,9 @@ REST_FRAMEWORK = {
 
 WSGI_APPLICATION = "igreja.wsgi.application"
 
-AUTH_USER_MODEL = "account.CustomUser"
+AUTH_USER_MODEL = "custom_account.CustomUser"
+
+SITE_ID = 1
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
