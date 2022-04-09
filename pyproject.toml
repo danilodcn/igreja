@@ -24,6 +24,8 @@ Pillow = "^9.1.0"
 requests = "^2.27.1"
 django-ordered-model = "^3.5"
 docutils = "^0.18.1"
+django-admin-multiple-choice-list-filter = "^0.1.1"
+django-extensions = "^3.1.5"
 
 [tool.black]
 line-length = 79

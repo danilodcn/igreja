@@ -32,7 +32,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_admin_multiple_choice_list_filter",
     "rest_framework",
+    "django_extensions",
     "ordered_model",
     "ckeditor",
     "ckeditor_uploader",
@@ -40,6 +42,7 @@ INSTALLED_APPS = [
     "apps.account",
     "apps.core",
     "apps.church",
+    "apps.config",
 ]
 
 MIDDLEWARE = [
@@ -146,9 +149,17 @@ sentry_sdk.init(
     environment=config("SENTRY_ENV"),
 )
 
+# AWS config
+
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
 
 AWS_QUERYSTRING_EXPIRE = config("AWS_QUERYSTRING_EXPIRE", 24 * 60 * 60)
+
+
+GEOPOSITION_MAP_OPTIONS = {
+    "minZoom": 15,
+    "maxZoom": 18,
+}
