@@ -51,6 +51,13 @@ class Post(models.Model):
     slug = models.SlugField(verbose_name="Slug", max_length=255, unique=True)
     image = models.ImageField(verbose_name="Imagem", null=True, blank=True)
     document = models.FileField("Documento", null=True, blank=True)
+    resume = models.TextField(
+        "Resumo",
+        max_length=1000,
+        help_text="Breve resumo",
+        null=True,
+        blank=True,
+    )
     content = RichTextUploadingField(
         verbose_name="Conteúdo", null=True, blank=True
     )
@@ -82,6 +89,10 @@ class Post(models.Model):
 
     def __str__(self) -> str:
         return "{}".format(self.title).strip()
+
+    @property
+    def get_resume(self):
+        ...
 
 
 class Reviews(models.Model):

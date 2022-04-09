@@ -195,7 +195,10 @@ class PostAdmin(admin.ModelAdmin):
                     )
                 },
             ),
-            ("Conteúdo", {"fields": ("content", "document", "image")}),
+            (
+                "Conteúdo",
+                {"fields": ("content", "resume", "document", "image")},
+            ),
             (
                 "Publicação",
                 {
