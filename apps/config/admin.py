@@ -1,3 +1,4 @@
+from ckeditor.widgets import CKEditorWidget
 from django import forms
 from django.contrib import admin
 from django.db.models import Count
@@ -104,9 +105,18 @@ class ImagesHeaderHomePageInlineAdmin(OrderedStackedInline):
         return ((None, {"fields": [("imagehome", "order"), "get_image"]}),)
 
 
+class HomePageConfigForm(forms.ModelForm):
+    content = forms.CharField(widget=CKEditorWidget())
+
+    class Meta:
+        model = HomePageConfig
+        fields = "__all__"
+
+
 class HomePageConfigAdmin(OrderedInlineModelAdminMixin, admin.ModelAdmin):
     list_display = ["__str__", "active"]
     # filter_horizontal = ["images"]
+    form = HomePageConfigForm
 
     inlines = [ImagesHeaderHomePageInlineAdmin, PastorConfigInlineAdmin]
     exclude = ["images"]

@@ -18,7 +18,6 @@ class ProfileAdminInline(admin.StackedInline):
 
 
 class UserAdmin(UserAdmin):
-    # add_form_template = "admin/auth/user/add_form.html"
     list_display = ["__str__", "email", "is_active", "last_login"]
     list_display_links = ["__str__", "email"]
     list_filter = [

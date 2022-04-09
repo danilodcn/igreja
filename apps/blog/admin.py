@@ -1,3 +1,5 @@
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
+from django import forms
 from django.contrib import admin
 from django.db.models.query import QuerySet
 from django.http import HttpRequest
@@ -130,11 +132,19 @@ def make_published(modeladmin, request: HttpRequest, queryset: QuerySet):
     queryset.update(status=Post.PUBLISHED, publish_date=timezone.now())
 
 
+class PostForm(forms.ModelForm):
+    content = forms.CharField(widget=CKEditorUploadingWidget())
+
+    class Meta:
+        model = Post
+        fields = "__all__"
+
+
 class PostAdmin(admin.ModelAdmin):
     model = Post
     actions = [make_published]
     inlines = [ReviewsInlineAdmin]
-
+    form = PostForm
     list_display = (
         "title",
         "status",
