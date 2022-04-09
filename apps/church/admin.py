@@ -34,10 +34,17 @@ class ChurchAdmin(admin.ModelAdmin):
     search_fields = ["code", "name"]
     list_per_page = 25
 
+    list_filter = [
+        ("address__state", admin.AllValuesFieldListFilter),
+    ]
+
+    inlines = [
+        MemberAminInline,
+    ]
+
+    @admin.display(description="Número de membros")
     def get_membres_number(self, obj: Church):
         return obj.members.all().count()
-
-    get_membres_number.short_description = "Número de membros"
 
 
 admin.site.register(MemberType, MembrerTypeAdmin)
