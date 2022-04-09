@@ -6,7 +6,6 @@ from apps.account.managers import CustomUserManager
 
 
 class CustomUser(AbstractUser):
-    username = None
     email = models.EmailField("Endereço de email", unique=True)
     bio = models.TextField(null=True, blank=True)
 
