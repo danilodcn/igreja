@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('config', '0003_alter_imagehomethroughmodel_options_and_more'),
+        ("config", "0003_alter_imagehomethroughmodel_options_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='homepageconfig',
-            name='maps_frame',
-            field=models.TextField(blank=True, null=True, verbose_name='Iframe do Google Maps'),
+            model_name="homepageconfig",
+            name="maps_frame",
+            field=models.TextField(
+                blank=True, null=True, verbose_name="Iframe do Google Maps"
+            ),
         ),
     ]

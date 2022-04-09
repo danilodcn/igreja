@@ -1,7 +1,6 @@
 from ckeditor.fields import RichTextField
-from django.db import models
+from django.db import models, transaction
 from ordered_model.models import OrderedModel
-from django.db import transaction
 
 from apps.church.models import Church, MemberType
 from apps.core.models import Image
@@ -12,7 +11,6 @@ class ImageHome(Image):
         ordering = ["order"]
         verbose_name = "Imagem da Home"
         verbose_name = "Imagens da Home"
-
 
 
 class HomePageConfig(models.Model):
@@ -32,7 +30,9 @@ class HomePageConfig(models.Model):
     )
     active = models.BooleanField("Ativa", default=False)
     content = RichTextField(verbose_name="Conteúdo", null=True, blank=True)
-    maps_frame = models.TextField(verbose_name="Iframe do Google Maps", null=True, blank=True)
+    maps_frame = models.TextField(
+        verbose_name="Iframe do Google Maps", null=True, blank=True
+    )
     # images = models.ManyToManyField(
     #     ImageHome, through='ImageHomeThroughModel', blank=True
     # )
@@ -44,7 +44,7 @@ class HomePageConfig(models.Model):
     @property
     def images(self):
         return ImageHomeThroughModel.objects.filter(homepageconfig_id=self.pk)
-    
+
     def __str__(self):
         return "{} - {}".format(self.church or "", self.title or "sem título")
 
@@ -64,7 +64,7 @@ class HomePageConfig(models.Model):
 
         if self.active:
             qs.exclude(pk=self.pk).update(active=False)
-    
+
     def sure_range_image_order(self):
         qs = self.images.all()
         with transaction.atomic():
@@ -79,14 +79,16 @@ class ImageHomeThroughModel(models.Model):
         HomePageConfig, on_delete=models.CASCADE
     )
     order = models.PositiveIntegerField("Ordem", null=True, blank=True)
+
     class Meta:
         ordering = ["order"]
         verbose_name = "Imagem"
         verbose_name_plural = "Imagens"
-        
+
     def __str__(self) -> str:
         name = self.imagehome.get_image_name()
         return "{} - {}".format(self.order, name)
+
 
 class PastorSection(OrderedModel):
     name = models.CharField(

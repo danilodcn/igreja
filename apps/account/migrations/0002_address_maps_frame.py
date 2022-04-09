@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('account', '0001_initial'),
+        ("account", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='address',
-            name='maps_frame',
-            field=models.TextField(blank=True, null=True, verbose_name='Iframe do Google Maps'),
+            model_name="address",
+            name="maps_frame",
+            field=models.TextField(
+                blank=True, null=True, verbose_name="Iframe do Google Maps"
+            ),
         ),
     ]

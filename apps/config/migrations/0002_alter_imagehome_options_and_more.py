@@ -6,21 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('config', '0001_initial'),
+        ("config", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='imagehome',
-            options={'ordering': ['order'], 'verbose_name': 'Imagens da Home'},
+            name="imagehome",
+            options={"ordering": ["order"], "verbose_name": "Imagens da Home"},
         ),
         migrations.AlterModelOptions(
-            name='imagehomethroughmodel',
-            options={'ordering': ['order']},
+            name="imagehomethroughmodel",
+            options={"ordering": ["order"]},
         ),
         migrations.AlterField(
-            model_name='imagehomethroughmodel',
-            name='order',
-            field=models.PositiveIntegerField(blank=True, null=True, verbose_name='Ordem'),
+            model_name="imagehomethroughmodel",
+            name="order",
+            field=models.PositiveIntegerField(
+                blank=True, null=True, verbose_name="Ordem"
+            ),
         ),
     ]
