@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 from ordered_model.models import OrderedModel
 
 from apps.account.models import Address, CustomUser
@@ -36,7 +35,6 @@ class Church(models.Model):
         null=True,
         blank=True,
     )
-
     code = models.CharField(
         "Código",
         max_length=30,

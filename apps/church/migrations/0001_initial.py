@@ -11,59 +11,12 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ("account", "0001_initial"),
+        ("account", "0003_alter_address_table"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name="Church",
-            fields=[
-                (
-                    "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                (
-                    "name",
-                    models.CharField(
-                        help_text="Nome da igreja",
-                        max_length=100,
-                        verbose_name="Nome",
-                    ),
-                ),
-                (
-                    "code",
-                    models.CharField(
-                        help_text="Usado para identificar a igreja",
-                        max_length=30,
-                        unique=True,
-                        verbose_name="Código",
-                    ),
-                ),
-                ("created_at", models.DateTimeField(auto_now_add=True)),
-                ("updated_at", models.DateTimeField(auto_now=True)),
-                (
-                    "address",
-                    models.ForeignKey(
-                        blank=True,
-                        null=True,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="account.address",
-                        verbose_name="Endereço",
-                    ),
-                ),
-            ],
-            options={
-                "verbose_name": "Igreja",
-                "verbose_name_plural": "Igrejas",
-            },
-        ),
-        migrations.CreateModel(
-            name="MemberType",
+            name="MembrerType",
             fields=[
                 (
                     "id",
@@ -98,8 +51,9 @@ class Migration(migrations.Migration):
                 (
                     "code",
                     models.CharField(
-                        help_text="Usado para identificar o tipo de membro",
+                        blank=True,
                         max_length=30,
+                        null=True,
                         unique=True,
                         verbose_name="Código",
                     ),
@@ -110,7 +64,6 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Tipo de membro",
                 "verbose_name_plural": "Tipos de membros",
-                "db_table": "church_member_type",
             },
         ),
         migrations.CreateModel(
@@ -126,15 +79,6 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
-                    "church",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        related_name="members",
-                        to="church.church",
-                        verbose_name="Igreja",
-                    ),
-                ),
-                (
                     "member",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
@@ -147,14 +91,63 @@ class Migration(migrations.Migration):
                     "member_type",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
-                        to="church.membertype",
+                        to="church.membrertype",
                         verbose_name="Tipo de membro",
                     ),
                 ),
             ],
+        ),
+        migrations.CreateModel(
+            name="Church",
+            fields=[
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        help_text="Nome da igreja",
+                        max_length=100,
+                        verbose_name="Nome",
+                    ),
+                ),
+                (
+                    "code",
+                    models.CharField(
+                        blank=True,
+                        max_length=30,
+                        null=True,
+                        unique=True,
+                        verbose_name="Código",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "address",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="account.address",
+                    ),
+                ),
+                (
+                    "members",
+                    models.ManyToManyField(
+                        related_name="church", to="church.member"
+                    ),
+                ),
+            ],
             options={
-                "verbose_name": "Membro",
-                "verbose_name_plural": "Membros",
+                "verbose_name": "Igreja",
+                "verbose_name_plural": "Igrejas",
             },
         ),
     ]

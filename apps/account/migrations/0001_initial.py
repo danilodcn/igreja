@@ -47,21 +47,6 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
-                    "username",
-                    models.CharField(
-                        error_messages={
-                            "unique": "A user with that username already exists."
-                        },
-                        help_text="Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.",
-                        max_length=150,
-                        unique=True,
-                        validators=[
-                            django.contrib.auth.validators.UnicodeUsernameValidator()
-                        ],
-                        verbose_name="username",
-                    ),
-                ),
-                (
                     "first_name",
                     models.CharField(
                         blank=True, max_length=150, verbose_name="first name"
@@ -101,7 +86,7 @@ class Migration(migrations.Migration):
                     models.EmailField(
                         max_length=254,
                         unique=True,
-                        verbose_name="Endereço de email",
+                        verbose_name="email address",
                     ),
                 ),
                 ("bio", models.TextField(blank=True, null=True)),
@@ -152,7 +137,7 @@ class Migration(migrations.Migration):
                         blank=True,
                         max_length=50,
                         null=True,
-                        verbose_name="País",
+                        verbose_name="Country",
                     ),
                 ),
                 (
@@ -190,7 +175,7 @@ class Migration(migrations.Migration):
                         ],
                         max_length=2,
                         null=True,
-                        verbose_name="Estado",
+                        verbose_name="State",
                     ),
                 ),
                 (
@@ -199,7 +184,7 @@ class Migration(migrations.Migration):
                         blank=True,
                         max_length=50,
                         null=True,
-                        verbose_name="Cidade",
+                        verbose_name="City",
                     ),
                 ),
                 (
@@ -208,7 +193,7 @@ class Migration(migrations.Migration):
                         blank=True,
                         max_length=30,
                         null=True,
-                        verbose_name="CEP",
+                        verbose_name="Zip Code",
                     ),
                 ),
                 (
