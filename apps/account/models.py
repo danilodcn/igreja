@@ -23,6 +23,10 @@ class CustomUser(AbstractUser):
 
         return "{} {}".format(first_name, last_name).strip()
 
+    def get_image(self):
+        profile: Profile = self.profile
+        return profile.image
+
     def save(self, *args, **kwargs):
         user = super().save(*args, **kwargs)
         self.on_create_user()
@@ -195,7 +199,7 @@ class Profile(models.Model):
         blank=True,
         null=True,
     )
-
+    image = models.ImageField("Perfil", null=True, blank=True)
     address = models.OneToOneField(
         Address,
         models.CASCADE,

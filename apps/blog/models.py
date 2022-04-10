@@ -1,5 +1,3 @@
-from ckeditor.fields import RichTextField
-from ckeditor.widgets import CKEditorWidget
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -79,6 +77,10 @@ class Post(models.Model):
         Category, related_name="posts", blank=True, verbose_name="Categorias"
     )
 
+    test = models.BooleanField("Em teste", default=False)
+    visualizations = models.IntegerField(
+        "Visualizações", editable=False, default=0
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -89,10 +91,6 @@ class Post(models.Model):
 
     def __str__(self) -> str:
         return "{}".format(self.title).strip()
-
-    @property
-    def get_resume(self):
-        ...
 
 
 class Reviews(models.Model):
