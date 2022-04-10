@@ -207,6 +207,7 @@ class PostAdmin(admin.ModelAdmin):
                         "get_published",
                         "publish_date",
                         "author",
+                        "test",
                     ),
                 },
             ),

@@ -1,4 +1,7 @@
-from rest_framework import filters, generics, views, viewsets
+from django.db.models import Q
+from django.http import Http404
+from rest_framework import filters, generics, status, views, viewsets
+from rest_framework.request import Request
 from rest_framework.response import Response
 
 from apps.core import pagination
@@ -51,7 +54,17 @@ class BlogViewSet(APIMixin, viewsets.ReadOnlyModelViewSet):
 
 
 class PostViewDetail(views.APIView):
-    queryset = Post.objects.filter(status=Post.PUBLISHED)
+    queryset = Post.objects.filter(Q(status=Post.PUBLISHED) | Q(test=True))
 
-    def get(self, request, slug):
-        return Response({"Danilo": slug})
+    def get(self, request: Request, slug):
+        post = self.get_object(slug=slug)
+        serializer = PostDetailSerializer(
+            instance=post, context={"request": request}
+        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def get_object(self, **kwargs) -> Post:
+        try:
+            return self.queryset.get(**kwargs)
+        except Post.DoesNotExist:
+            raise Http404

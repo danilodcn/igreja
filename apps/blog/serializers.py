@@ -12,9 +12,12 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class AuthorSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source="get_full_name")
+    image = serializers.ImageField(source="get_image")
+
     class Meta:
         model = CustomUser
-        fields = ["id", "email", "get_full_name"]
+        fields = ["email", "name", "image"]
 
 
 class PostSerializerBase(serializers.HyperlinkedModelSerializer):
