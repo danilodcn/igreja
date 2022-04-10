@@ -33,9 +33,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_admin_multiple_choice_list_filter",
-    "oauth2_provider",
     "rest_framework",
     "rest_framework.authtoken",
+    "rest_framework_simplejwt",
     "django_extensions",
     "ordered_model",
     "ckeditor",
@@ -52,7 +52,6 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "oauth2_provider.middleware.OAuth2TokenMiddleware",
     # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -82,12 +81,9 @@ TEMPLATES = [
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
-    ],
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "oauth2_provider.contrib.rest_framework.OAuth2Authentication",
-    ),
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    )
 }
 
 WSGI_APPLICATION = "igreja.wsgi.application"
@@ -95,7 +91,6 @@ WSGI_APPLICATION = "igreja.wsgi.application"
 AUTH_USER_MODEL = "account.CustomUser"
 
 SITE_ID = 1
-
 
 CORS_ORIGIN_ALLOW_ALL = True
 

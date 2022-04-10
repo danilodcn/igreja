@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django.http import Http404
-from rest_framework import filters, generics, status, views, viewsets
+from rest_framework import filters, status, views, viewsets
 from rest_framework.request import Request
 from rest_framework.response import Response
 
