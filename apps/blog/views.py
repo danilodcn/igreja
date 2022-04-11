@@ -28,7 +28,8 @@ class CategoryListViewSet(APIMixin, viewsets.ReadOnlyModelViewSet):
 
 
 class BlogViewSet(APIMixin, viewsets.ReadOnlyModelViewSet):
-    queryset = Post.objects.filter(status=Post.PUBLISHED)
+    active_categories = Category.objects.filter(active=True)
+    queryset = Post.objects.filter(status=Post.PUBLISHED, categories__in=active_categories)
     # serializer_class = PostSerializer
     page_size = 6
 
