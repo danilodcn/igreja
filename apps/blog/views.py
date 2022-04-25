@@ -46,7 +46,7 @@ class BlogViewSet(APIMixin, viewsets.ReadOnlyModelViewSet):
         return PostDetailSerializer
 
     def get_queryset(self):
-        qs = super().get_queryset()
+        qs = super().get_queryset().distinct()
         slug = self.request.query_params.get("slug", None)
         if slug:
             qs.filter(slug=slug)

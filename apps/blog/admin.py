@@ -156,6 +156,7 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = (
         "status",
         "publish_date",
+        "categories",
     )
     list_editable = ("slug",)
     search_fields = (
