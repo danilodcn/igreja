@@ -32,6 +32,7 @@ class PostSerializerBase(serializers.HyperlinkedModelSerializer):
 
 class PostListSerializer(serializers.HyperlinkedModelSerializer):
     author = AuthorSerializer()
+    categories = CategorySerializer(many=True)
 
     class Meta:
         model = Post
@@ -45,6 +46,7 @@ class PostListSerializer(serializers.HyperlinkedModelSerializer):
             "url",
             "slug",
             "image",
+            "categories",
         ]
 
 

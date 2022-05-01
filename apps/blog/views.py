@@ -3,6 +3,7 @@ from django.http import Http404
 from rest_framework import filters, status, views, viewsets
 from rest_framework.request import Request
 from rest_framework.response import Response
+from django_filters import rest_framework as _filters
 
 from apps.core import pagination
 
@@ -14,12 +15,23 @@ from .serializers import (
 )
 
 
+class PostFilter(_filters.FilterSet):
+    class Meta:
+        model = Post
+        fields = ["slug", "categories"]
+
+
 class APIMixin:
     page_size = 10
     page_size_query_param = "page_size"
     max_page_size = 10
 
     pagination_class = pagination.PagenationBase
+    
+class BlogViewSetBase(APIMixin):
+    filter_backends = (_filters.DjangoFilterBackend, filters.SearchFilter)
+    search_fields = ["title", "subtitle", "resume"]
+    filterset_class = PostFilter
 
 
 class CategoryListViewSet(APIMixin, viewsets.ReadOnlyModelViewSet):
@@ -27,16 +39,15 @@ class CategoryListViewSet(APIMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = CategorySerializer
 
 
-class BlogViewSet(APIMixin, viewsets.ReadOnlyModelViewSet):
+class BlogViewSet(BlogViewSetBase, viewsets.ReadOnlyModelViewSet):
     active_categories = Category.objects.filter(active=True)
-    queryset = Post.objects.filter(status=Post.PUBLISHED, categories__in=active_categories)
-    # serializer_class = PostSerializer
+    queryset = Post.objects.filter(
+        status=Post.PUBLISHED, categories__in=active_categories
+    )
     page_size = 6
 
     pagination_class = pagination.PagenationBase
-    filter_backends = [filters.SearchFilter]
-    search_fields = ["title", "subtitle"]
-
+    
     def get_serializer_class(self):
         if self.action == "list":
             return PostListSerializer
@@ -47,14 +58,10 @@ class BlogViewSet(APIMixin, viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         qs = super().get_queryset().distinct()
-        slug = self.request.query_params.get("slug", None)
-        if slug:
-            qs.filter(slug=slug)
-
         return qs
 
 
-class PostViewDetail(views.APIView):
+class PostViewDetail(BlogViewSetBase, views.APIView):
     queryset = Post.objects.filter(Q(status=Post.PUBLISHED) | Q(test=True))
 
     def get(self, request: Request, slug):

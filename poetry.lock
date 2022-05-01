@@ -320,6 +320,17 @@ python-jose = ["python-jose (==3.3.0)"]
 test = ["cryptography", "pytest-cov", "pytest-django", "pytest-xdist", "pytest", "tox"]
 
 [[package]]
+name = "djangorestframework-word-filter"
+version = "0.2.0"
+description = "By word filter backend for Django REST Framework. No db backend special features (work on all db)."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+djangorestframework = "*"
+
+[[package]]
 name = "docutils"
 version = "0.18.1"
 description = "Docutils -- Python Documentation Utilities"
@@ -932,7 +943,7 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.9.12"
-content-hash = "11dcf75f2c568b86004632d557e97739ea40a4d686de6fbefdc7814c0b9094f2"
+content-hash = "5aa20390503892ed8217a23583a1233fd39ac0e51f0d409e617e76c53d2a6c18"
 
 [metadata.files]
 appnope = [
@@ -1062,6 +1073,10 @@ djangorestframework = [
 djangorestframework-simplejwt = [
     {file = "djangorestframework_simplejwt-5.1.0-py3-none-any.whl", hash = "sha256:cd3ee3aabdc98de104957c136e74ba2a16571b151c88ecd97421fce171a03ea4"},
     {file = "djangorestframework_simplejwt-5.1.0.tar.gz", hash = "sha256:75323528a7b910843b879194746f0ebc3481c4ad9f354de2dd162160662fb95a"},
+]
+djangorestframework-word-filter = [
+    {file = "djangorestframework-word-filter-0.2.0.tar.gz", hash = "sha256:9896599ad5efb0e312deb65169d39040726626f2ff18c44c9c6b1b67f3f07933"},
+    {file = "djangorestframework_word_filter-0.2.0-py2.py3-none-any.whl", hash = "sha256:0946e964be90fd7c7ff9f7979d2d21e851f86e5d6d2d1fad24e5a774b8ee3cd1"},
 ]
 docutils = [
     {file = "docutils-0.18.1-py2.py3-none-any.whl", hash = "sha256:23010f129180089fbcd3bc08cfefccb3b890b0050e1ca00c867036e9d161b98c"},
