@@ -6,7 +6,6 @@ from apps.account.managers import CustomUserManager
 
 
 class CustomUser(AbstractUser):
-    username = None
     email = models.EmailField("Endereço de email", unique=True)
     bio = models.TextField(null=True, blank=True)
 
@@ -23,6 +22,10 @@ class CustomUser(AbstractUser):
         last_name = self.last_name.strip()
 
         return "{} {}".format(first_name, last_name).strip()
+
+    def get_image(self):
+        profile: Profile = self.profile
+        return profile.image
 
     def save(self, *args, **kwargs):
         user = super().save(*args, **kwargs)
@@ -196,7 +199,7 @@ class Profile(models.Model):
         blank=True,
         null=True,
     )
-
+    image = models.ImageField("Perfil", null=True, blank=True)
     address = models.OneToOneField(
         Address,
         models.CASCADE,

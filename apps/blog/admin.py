@@ -1,3 +1,5 @@
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
+from django import forms
 from django.contrib import admin
 from django.db.models.query import QuerySet
 from django.http import HttpRequest
@@ -78,7 +80,6 @@ class PostsInline(admin.TabularInline):
         return super().get_field_queryset(db, db_field, request)
 
 
-@admin.register(Category)
 class CategoryAdmin(OrderedModelAdmin):
     model = Category
     list_display = [
@@ -131,12 +132,19 @@ def make_published(modeladmin, request: HttpRequest, queryset: QuerySet):
     queryset.update(status=Post.PUBLISHED, publish_date=timezone.now())
 
 
-@admin.register(Post)
+class PostForm(forms.ModelForm):
+    content = forms.CharField(widget=CKEditorUploadingWidget())
+
+    class Meta:
+        model = Post
+        fields = "__all__"
+
+
 class PostAdmin(admin.ModelAdmin):
     model = Post
     actions = [make_published]
     inlines = [ReviewsInlineAdmin]
-
+    form = PostForm
     list_display = (
         "title",
         "status",
@@ -148,6 +156,7 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = (
         "status",
         "publish_date",
+        "categories",
     )
     list_editable = ("slug",)
     search_fields = (
@@ -187,7 +196,10 @@ class PostAdmin(admin.ModelAdmin):
                     )
                 },
             ),
-            ("Conteúdo", {"fields": ("content", "document", "image")}),
+            (
+                "Conteúdo",
+                {"fields": ("content", "resume", "document", "image")},
+            ),
             (
                 "Publicação",
                 {
@@ -196,6 +208,7 @@ class PostAdmin(admin.ModelAdmin):
                         "get_published",
                         "publish_date",
                         "author",
+                        "test",
                     ),
                 },
             ),
@@ -239,3 +252,14 @@ class PostAdmin(admin.ModelAdmin):
             return request.user == obj.author
 
         return request.user.is_superuser
+
+
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Post, PostAdmin)
+
+
+class Site(admin.AdminSite):
+    ...
+
+
+# admin.site.register()
