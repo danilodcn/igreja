@@ -1,9 +1,9 @@
 from django.db.models import Q
 from django.http import Http404
+from django_filters import rest_framework as _filters
 from rest_framework import filters, status, views, viewsets
 from rest_framework.request import Request
 from rest_framework.response import Response
-from django_filters import rest_framework as _filters
 
 from apps.core import pagination
 
@@ -27,7 +27,8 @@ class APIMixin:
     max_page_size = 10
 
     pagination_class = pagination.PagenationBase
-    
+
+
 class BlogViewSetBase(APIMixin):
     filter_backends = (_filters.DjangoFilterBackend, filters.SearchFilter)
     search_fields = ["title", "subtitle", "resume"]
@@ -47,12 +48,14 @@ class BlogViewSet(BlogViewSetBase, viewsets.ReadOnlyModelViewSet):
     page_size = 6
 
     pagination_class = pagination.PagenationBase
-    
+
     def get_serializer_class(self):
+        slug = self.request.query_params.get("slug", None)
+        if self.action == "retrieve" or slug:
+            return PostDetailSerializer
+
         if self.action == "list":
             return PostListSerializer
-        if self.action == "retrieve":
-            return PostDetailSerializer
 
         return PostDetailSerializer
 
