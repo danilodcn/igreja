@@ -1,12 +1,12 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
+from rest_framework import generics, permissions, viewsets
+from rest_framework.request import Request
 from rest_framework.response import Response
 
 from apps.account.models import CustomUser
+from apps.account.serializers import UserSerializer
 from apps.api.serializers.blog import PostSerializer
 from apps.api.serializers.user import ListUserSerializer, NewUserSerializer
-from apps.blog.models import Post
-from apps.core import pagination
 
 
 class CreateUserViewSet(viewsets.ModelViewSet):
@@ -30,4 +30,13 @@ class ListUserViewSet(viewsets.ViewSet):
         queryset = self.queryset.all()
         user = get_object_or_404(queryset, pk=pk)
         serializer = self.serializer_class(user, context={"request": request})
+        return Response(serializer.data)
+
+
+class GetLoggedUser(generics.views.APIView):
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request: Request):
+        serializer = UserSerializer(request.user)
         return Response(serializer.data)

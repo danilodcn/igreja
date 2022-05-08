@@ -1,3 +1,4 @@
+import datetime
 import os
 from pathlib import Path
 
@@ -91,6 +92,21 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": (
         "django_filters.rest_framework.DjangoFilterBackend",
     ),
+}
+
+SIMPLE_JWT = {
+    "TOKEN_REFRESH_SERIALIZER": "apps.account.serializers.CustomTokenObtainPairSerializer",
+}
+
+JWT_AUTH = {
+    "TOKEN_REFRESH_SERIALIZER": "apps.account.serializers.CustomTokenObtainPairSerializer",
+    # how long the original token is valid for
+    "JWT_EXPIRATION_DELTA": datetime.timedelta(days=2),
+    # allow refreshing of tokens
+    "JWT_ALLOW_REFRESH": True,
+    # this is the maximum time AFTER the token was issued that
+    # it can be refreshed.  exprired tokens can't be refreshed.
+    "JWT_REFRESH_EXPIRATION_DELTA": datetime.timedelta(days=7),
 }
 
 WSGI_APPLICATION = "igreja.wsgi.application"
