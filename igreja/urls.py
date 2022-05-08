@@ -33,6 +33,7 @@ APPS_URLS = [
     path("accounts/", include("apps.account.urls")),
     path("api/", include("apps.api.urls")),
     path("api/blog/", include("apps.blog.urls")),
+    path("api/config/", include("apps.config.urls")),
     path("", home, name="home"),
     # path(r'', include('feincms.urls')),
 ]

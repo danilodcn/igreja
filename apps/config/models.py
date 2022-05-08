@@ -73,7 +73,7 @@ class HomePageConfig(models.Model):
                 image.save()
 
 
-class ImageHomeThroughModel(models.Model):
+class ImageHomeThroughModel(OrderedModel):
     imagehome = models.ForeignKey(ImageHome, on_delete=models.CASCADE)
     homepageconfig = models.ForeignKey(
         HomePageConfig, on_delete=models.CASCADE
