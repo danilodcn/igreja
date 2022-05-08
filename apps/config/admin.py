@@ -13,10 +13,10 @@ from ordered_model.admin import (
 from apps.core import filters
 
 from .models import (
+    ChurchBodySection,
     HomePageConfig,
     ImageHome,
     ImageHomeThroughModel,
-    ChurchBodySection,
 )
 
 
