@@ -16,7 +16,7 @@ from .models import (
     HomePageConfig,
     ImageHome,
     ImageHomeThroughModel,
-    PastorSection,
+    ChurchBodySection,
 )
 
 
@@ -24,8 +24,17 @@ class ImageHomeAdmin(admin.ModelAdmin):
     search_fields = ["name", "image"]
 
 
+class PastorConfigInlineForm(forms.ModelForm):
+    content = forms.CharField(widget=CKEditorWidget())
+
+    class Meta:
+        model = HomePageConfig
+        fields = "__all__"
+
+
 class PastorConfigInlineAdmin(OrderedTabularInline):
-    model = PastorSection
+    form = PastorConfigInlineForm
+    model = ChurchBodySection
     extra = 0
     readonly_fields = (
         "order",

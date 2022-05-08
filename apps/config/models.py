@@ -9,8 +9,8 @@ from apps.core.models import Image
 class ImageHome(Image):
     class Meta:
         ordering = ["order"]
-        verbose_name = "Imagem da Home"
-        verbose_name = "Imagens da Home"
+        verbose_name = "Imagem da página principal"
+        verbose_name = "Imagens da página principal"
 
 
 class HomePageConfig(models.Model):
@@ -38,8 +38,8 @@ class HomePageConfig(models.Model):
     # )
 
     class Meta:
-        verbose_name = "Condiguração da Home"
-        verbose_name_plural = "Configurações da Página Home"
+        verbose_name = "Condiguração da Principal"
+        verbose_name_plural = "Configurações da Página Principal"
 
     @property
     def images(self):
@@ -90,7 +90,7 @@ class ImageHomeThroughModel(models.Model):
         return "{} - {}".format(self.order, name)
 
 
-class PastorSection(OrderedModel):
+class ChurchBodySection(OrderedModel):
     name = models.CharField(
         "Nome completo", max_length=100, null=True, blank=False
     )
@@ -107,7 +107,7 @@ class PastorSection(OrderedModel):
     page = models.ForeignKey(
         HomePageConfig,
         on_delete=models.CASCADE,
-        related_name="pastor_sections",
+        related_name="church_body_sections",
     )
     order_with_respect_to = "page"
 
