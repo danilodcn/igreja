@@ -19,3 +19,6 @@ class CustomUserManager(BaseUserManager):
         kwargs["is_superuser"] = True
 
         self.create_user(email, password, **kwargs)
+
+    def get_by_natural_key(self, email):
+        return self.get(email__iexact=email)
