@@ -19,6 +19,7 @@ class ImageHomeSerializer(serializers.ModelSerializer):
 
 class ChurchBodySerializer(serializers.ModelSerializer):
     member_type = MemberTypeSerializer()
+
     class Meta:
         model = models.ChurchBodySection
         exclude = []
