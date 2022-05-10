@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.church.models import MemberType
+from apps.church.serilaizers import ChurchSerializer
 
 from . import models
 
@@ -36,6 +37,7 @@ class ImageHomeSerialiser(serializers.ModelSerializer):
 class PageHomeSerializer(serializers.ModelSerializer):
     images = ImageHomeSerialiser(many=True)
     body = ChurchBodySerializer(many=True, source="church_body_sections")
+    church = ChurchSerializer()
 
     class Meta:
         model = models.HomePageConfig

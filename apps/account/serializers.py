@@ -1,7 +1,13 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from .models import CustomUser
+from .models import Address, CustomUser
+
+
+class AdressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        exclude = ["created_at", "updated_at"]
 
 
 class UserSerializer(serializers.ModelSerializer):

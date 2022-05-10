@@ -115,7 +115,10 @@ class ImagesHeaderHomePageInlineAdmin(OrderedStackedInline):
 
 
 class HomePageConfigForm(forms.ModelForm):
-    content = forms.CharField(widget=CKEditorWidget())
+    content = forms.CharField(label="Conteúdo", widget=CKEditorWidget())
+    body_content = forms.CharField(
+        label="Seção pastores", widget=CKEditorWidget()
+    )
 
     class Meta:
         model = HomePageConfig
