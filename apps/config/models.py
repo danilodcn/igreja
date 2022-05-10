@@ -21,6 +21,7 @@ class HomePageConfig(models.Model):
         null=False,
         blank=False,
     )
+
     church = models.ForeignKey(
         Church,
         on_delete=models.SET_NULL,
@@ -30,6 +31,19 @@ class HomePageConfig(models.Model):
     )
     active = models.BooleanField("Ativa", default=False)
     content = RichTextField(verbose_name="Conteúdo", null=True, blank=True)
+
+    body_title = models.CharField(
+        "Subtítulo",
+        max_length=200,
+        help_text="Subtítulo da seção Pastores",
+        null=True,
+        blank=False,
+    )
+
+    body_content = RichTextField(
+        verbose_name="Seção pastores", null=True, blank=True
+    )
+
     maps_frame = models.TextField(
         verbose_name="Iframe do Google Maps", null=True, blank=True
     )

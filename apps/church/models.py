@@ -41,6 +41,9 @@ class Church(models.Model):
         unique=True,
         help_text="Usado para identificar a igreja",
     )
+    is_default = models.BooleanField(
+        "Igreja sede?", default=False, null=True, blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
