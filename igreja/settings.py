@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "igreja.apps.blog",
     "igreja.apps.account",
     "igreja.apps.core",
+    "igreja.apps.content",
     "igreja.apps.church",
     "igreja.apps.config",
 ]
