@@ -6,7 +6,10 @@ from rest_framework.response import Response
 from igreja.apps.account.models import CustomUser
 from igreja.apps.account.serializers import UserSerializer
 from igreja.apps.api.serializers.blog import PostSerializer
-from igreja.apps.api.serializers.user import ListUserSerializer, NewUserSerializer
+from igreja.apps.api.serializers.user import (
+    ListUserSerializer,
+    NewUserSerializer,
+)
 
 
 class CreateUserViewSet(viewsets.ModelViewSet):
