@@ -26,6 +26,7 @@ class HomePageConfig(models.Model):
         Church,
         on_delete=models.SET_NULL,
         help_text="Igreja ao qual a configuração estará associada",
+        related_name="home_config",
         null=True,
         blank=True,
     )

@@ -44,6 +44,7 @@ class Church(models.Model):
     is_default = models.BooleanField(
         "Igreja sede?", default=False, null=True, blank=True
     )
+    active = models.BooleanField("Ativa", default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
