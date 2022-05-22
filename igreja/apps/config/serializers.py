@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from apps.church.models import MemberType
-from apps.church.serializers import ChurchDetailSerializer
+from igreja.apps.church.models import MemberType
+from igreja.apps.church.serializers import ChurchDetailSerializer
 
 from . import models
 

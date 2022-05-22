@@ -10,7 +10,7 @@ from ordered_model.admin import (
     OrderedTabularInline,
 )
 
-from apps.core import filters
+from igreja.apps.core import filters
 
 from .models import (
     ChurchBodySection,

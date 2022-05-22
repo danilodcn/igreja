@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from model_utils import FieldTracker
 
-from apps.account.managers import CustomUserManager
+from igreja.apps.account.managers import CustomUserManager
 
 
 class CustomUser(AbstractUser):

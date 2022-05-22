@@ -1,6 +1,6 @@
 from django.urls import include, path
 
-from apps.api.views import GetLoggedUser
+from igreja.apps.api.views import GetLoggedUser
 
 from .routers import router
 

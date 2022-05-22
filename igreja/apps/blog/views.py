@@ -5,7 +5,7 @@ from rest_framework import filters, status, views, viewsets
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from apps.core import pagination
+from igreja.apps.core import pagination
 
 from .models import Category, Post
 from .serializers import (

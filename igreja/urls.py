@@ -8,7 +8,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from apps.core.views import home
+from igreja.apps.core.views import home
 
 CONFIG_URLS = [
     path("admin/", admin.site.urls),
@@ -30,11 +30,11 @@ if settings.DEBUG:
     )
 
 APPS_URLS = [
-    path("accounts/", include("apps.account.urls")),
-    path("api/", include("apps.api.urls")),
-    path("api/blog/", include("apps.blog.urls")),
-    path("api/config/", include("apps.config.urls")),
-    path("api/church/", include("apps.church.urls")),
+    path("accounts/", include("igreja.apps.account.urls")),
+    path("api/", include("igreja.apps.api.urls")),
+    path("api/blog/", include("igreja.apps.blog.urls")),
+    path("api/config/", include("igreja.apps.config.urls")),
+    path("api/church/", include("igreja.apps.church.urls")),
     path("", home, name="home"),
     # path(r'', include('feincms.urls')),
 ]

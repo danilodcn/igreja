@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.blog.models import Category, Post
+from igreja.apps.blog.models import Category, Post
 
 from .user import ListUserSerializer
 

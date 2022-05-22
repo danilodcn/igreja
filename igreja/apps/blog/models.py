@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from ordered_model.models import OrderedModel
 
-from apps.account.models import CustomUser
+from igreja.apps.account.models import CustomUser
 
 
 class Category(OrderedModel):

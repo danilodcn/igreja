@@ -3,10 +3,10 @@ from rest_framework import generics, permissions, viewsets
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from apps.account.models import CustomUser
-from apps.account.serializers import UserSerializer
-from apps.api.serializers.blog import PostSerializer
-from apps.api.serializers.user import ListUserSerializer, NewUserSerializer
+from igreja.apps.account.models import CustomUser
+from igreja.apps.account.serializers import UserSerializer
+from igreja.apps.api.serializers.blog import PostSerializer
+from igreja.apps.api.serializers.user import ListUserSerializer, NewUserSerializer
 
 
 class CreateUserViewSet(viewsets.ModelViewSet):

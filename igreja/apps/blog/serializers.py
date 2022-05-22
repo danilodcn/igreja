@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.account.models import CustomUser
+from igreja.apps.account.models import CustomUser
 
 from .models import Category, Post
 

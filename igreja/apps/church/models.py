@@ -1,7 +1,7 @@
 from django.db import models
 from ordered_model.models import OrderedModel
 
-from apps.account.models import Address, CustomUser
+from igreja.apps.account.models import Address, CustomUser
 
 
 class MemberType(OrderedModel):

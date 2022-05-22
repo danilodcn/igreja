@@ -2,8 +2,8 @@ from ckeditor.fields import RichTextField
 from django.db import models, transaction
 from ordered_model.models import OrderedModel
 
-from apps.church.models import Church, MemberType
-from apps.core.models import Image
+from igreja.apps.church.models import Church, MemberType
+from igreja.apps.core.models import Image
 
 
 class ImageHome(Image):

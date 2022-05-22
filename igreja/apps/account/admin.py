@@ -2,8 +2,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.http import HttpRequest
 
-from apps.account.models import Address, CustomUser, Profile
-from apps.church.admin import MemberAminInline
+from igreja.apps.account.models import Address, CustomUser, Profile
+from igreja.apps.church.admin import MemberAminInline
 
 
 class AddressAdmin(admin.ModelAdmin):

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.account.models import Address, CustomUser, Profile
+from igreja.apps.account.models import Address, CustomUser, Profile
 
 
 class AddressSerializer(serializers.ModelSerializer):

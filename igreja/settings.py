@@ -45,11 +45,11 @@ INSTALLED_APPS = [
     "ckeditor",
     "ckeditor_uploader",
     # My apps
-    "apps.blog",
-    "apps.account",
-    "apps.core",
-    "apps.church",
-    "apps.config",
+    "igreja.apps.blog",
+    "igreja.apps.account",
+    "igreja.apps.core",
+    "igreja.apps.church",
+    "igreja.apps.config",
 ]
 
 MIDDLEWARE = [
@@ -95,11 +95,11 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "TOKEN_REFRESH_SERIALIZER": "apps.account.serializers.CustomTokenObtainPairSerializer",
+    "TOKEN_REFRESH_SERIALIZER": "igreja.apps.account.serializers.CustomTokenObtainPairSerializer",
 }
 
 JWT_AUTH = {
-    "TOKEN_REFRESH_SERIALIZER": "apps.account.serializers.CustomTokenObtainPairSerializer",
+    "TOKEN_REFRESH_SERIALIZER": "igreja.apps.account.serializers.CustomTokenObtainPairSerializer",
     # how long the original token is valid for
     "JWT_EXPIRATION_DELTA": datetime.timedelta(days=2),
     # allow refreshing of tokens
@@ -170,7 +170,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # https://django-ckeditor.readthedocs.io/en/latest/#
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
-CKEDITOR_FILENAME_GENERATOR = "apps.core.utils.get_filename"
+CKEDITOR_FILENAME_GENERATOR = "igreja.apps.core.utils.get_filename"
 CKEDITOR_CONFIGS = {
     "default": {
         # "toolbar": "Custom",

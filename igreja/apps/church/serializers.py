@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.account.serializers import AdressSerializer
+from igreja.apps.account.serializers import AdressSerializer
 
 from . import models
 
