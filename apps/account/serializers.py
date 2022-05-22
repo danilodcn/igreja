@@ -5,6 +5,8 @@ from .models import Address, CustomUser
 
 
 class AdressSerializer(serializers.ModelSerializer):
+    address_type = serializers.CharField(source="get_address_type_display")
+
     class Meta:
         model = Address
         exclude = ["created_at", "updated_at"]
