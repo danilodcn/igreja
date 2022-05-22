@@ -28,7 +28,9 @@ class ChurchAdmin(admin.ModelAdmin):
     form = ChurchAdminForm
     list_display = [
         "__str__",
+        "is_default",
         "get_membres_number",
+        "active",
     ]
     autocomplete_fields = ["address"]
     search_fields = ["code", "name"]
