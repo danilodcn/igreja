@@ -14,14 +14,6 @@ class ImageHome(Image):
 
 
 class HomePageConfig(models.Model):
-    title = models.CharField(
-        "Título",
-        max_length=200,
-        help_text="título da página",
-        null=False,
-        blank=False,
-    )
-
     church = models.ForeignKey(
         Church,
         on_delete=models.SET_NULL,
@@ -31,19 +23,6 @@ class HomePageConfig(models.Model):
         blank=True,
     )
     active = models.BooleanField("Ativa", default=False)
-    content = RichTextField(verbose_name="Conteúdo", null=True, blank=True)
-
-    body_title = models.CharField(
-        "Subtítulo",
-        max_length=200,
-        help_text="Subtítulo da seção Pastores",
-        null=True,
-        blank=False,
-    )
-
-    body_content = RichTextField(
-        verbose_name="Seção pastores", null=True, blank=True
-    )
 
     maps_frame = models.TextField(
         verbose_name="Iframe do Google Maps", null=True, blank=True
@@ -53,15 +32,27 @@ class HomePageConfig(models.Model):
     # )
 
     class Meta:
-        verbose_name = "Condiguração da Principal"
+        verbose_name = "Configuração da Página Principal"
         verbose_name_plural = "Configurações da Página Principal"
+
+    def __str__(self):
+        return "{} - {}".format(
+            self.pk, self.church or "Nenhuma igreja cadastrada"
+        )
 
     @property
     def images(self):
         return ImageHomeThroughModel.objects.filter(homepageconfig_id=self.pk)
 
-    def __str__(self):
-        return "{} - {}".format(self.church or "", self.title or "sem título")
+    @property
+    def church_body_sections(self):
+        return ChurchBodySection.objects.filter(page_id=self.pk)
+
+    @property
+    def page_content_index(self):
+        return PageContent.objects.filter(
+            page_id=self.pk, page_type=PageContent.INDEX
+        )
 
     def save(
         self,
@@ -88,6 +79,49 @@ class HomePageConfig(models.Model):
                 image.save()
 
 
+class PageContent(models.Model):
+    INDEX = 1
+    MINISTRY = 2
+    PAGE_TYPES = (
+        (INDEX, "Página principal"),
+        (MINISTRY, "Ministérios"),
+    )
+
+    BODY_SECTIONS = 10
+    MINISTRY_SECTIONS = 11
+    SECTIONS_TYPES = (
+        (BODY_SECTIONS, "Seção dos pastores"),
+        (MINISTRY_SECTIONS, "Seção dos ministérios"),
+    )
+
+    page_type = models.PositiveSmallIntegerField(
+        "Tipo de página",
+        choices=PAGE_TYPES,
+        help_text="Tipo de página",
+    )
+    content_type = models.PositiveSmallIntegerField(
+        "Tipo de conteúdo",
+        choices=SECTIONS_TYPES,
+        help_text="Tipo de conteúdo",
+    )
+    title = models.CharField(
+        "Título",
+        max_length=200,
+        help_text="título do conteúdo",
+        null=False,
+        blank=False,
+    )
+    content = RichTextField(verbose_name="Conteúdo", null=True, blank=True)
+    page = models.ForeignKey(
+        HomePageConfig,
+        on_delete=models.CASCADE,
+    )
+
+    class Meta:
+        verbose_name = "Conteúdo da Página"
+        verbose_name_plural = "Conteúdos da Página"
+
+
 class ImageHomeThroughModel(OrderedModel):
     imagehome = models.ForeignKey(ImageHome, on_delete=models.CASCADE)
     homepageconfig = models.ForeignKey(
@@ -105,25 +139,18 @@ class ImageHomeThroughModel(OrderedModel):
         return "{} - {}".format(self.order, name)
 
 
-class ChurchBodySection(OrderedModel):
+class ChurchMinistryAdnBodySection(OrderedModel):
     name = models.CharField(
         "Nome completo", max_length=100, null=True, blank=False
     )
-    member_type = models.ForeignKey(
-        MemberType,
-        on_delete=models.SET_NULL,
-        verbose_name="Tipo de membro",
-        null=True,
-        blank=True,
-    )
-    content = models.TextField("Texto", null=True, blank=True)
     image = models.ImageField("Imagem", null=True, blank=True)
+    content = models.TextField("Texto", null=True, blank=True)
 
     page = models.ForeignKey(
         HomePageConfig,
         on_delete=models.CASCADE,
-        related_name="church_body_sections",
     )
+
     order_with_respect_to = "page"
 
     class Meta:
@@ -131,6 +158,36 @@ class ChurchBodySection(OrderedModel):
             "page",
             "order",
         )
+        abstract = True
+
+
+class ChurchBodySection(ChurchMinistryAdnBodySection):
+    member_type = models.ForeignKey(
+        MemberType,
+        on_delete=models.SET_NULL,
+        verbose_name="Tipo de membro",
+        null=True,
+        blank=True,
+    )
 
     def __str__(self) -> str:
         return "{} - {}".format(self.member_type or "Sem título", self.name)
+
+
+class MinistryChurch(ChurchMinistryAdnBodySection):
+    ...
+
+
+class ContactMeans(models.Model):
+    WHATSAPP = "whatsapp"
+    EMAIL = "email"
+    FACEBOOK = "facebook"
+    TYPES = (
+        (WHATSAPP, WHATSAPP),
+        (EMAIL, EMAIL),
+        (FACEBOOK, FACEBOOK),
+    )
+    type = models.CharField("Forma de contato", choices=TYPES, max_length=30)
+    contact = models.CharField("Contato", max_length=200)
+
+    ministry = models.ForeignKey(to=MinistryChurch, on_delete=models.CASCADE)
