@@ -17,6 +17,7 @@ class HomePageConfig(models.Model):
     church = models.ForeignKey(
         Church,
         on_delete=models.SET_NULL,
+        verbose_name="Igreja",
         help_text="Igreja ao qual a configuração estará associada",
         related_name="home_config",
         null=True,
@@ -120,6 +121,7 @@ class PageContent(models.Model):
     class Meta:
         verbose_name = "Conteúdo da Página"
         verbose_name_plural = "Conteúdos da Página"
+        ordering = ["page_type", "content_type"]
 
 
 class ImageHomeThroughModel(OrderedModel):
@@ -191,3 +193,10 @@ class ContactMeans(models.Model):
     contact = models.CharField("Contato", max_length=200)
 
     ministry = models.ForeignKey(to=MinistryChurch, on_delete=models.CASCADE)
+
+
+class MinistryPageConfig(HomePageConfig):
+    class Meta:
+        verbose_name = "Configuração da Página dos Ministérios"
+        verbose_name_plural = "Configurações da Páginas dos Ministérios"
+        proxy = True
