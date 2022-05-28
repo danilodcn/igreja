@@ -1,7 +1,6 @@
 from ckeditor.widgets import CKEditorWidget
 from django import forms
 from django.contrib import admin
-from django.db.models import Count
 from django.http import HttpRequest
 from django.utils.safestring import mark_safe
 from ordered_model.admin import (
@@ -17,6 +16,7 @@ from .models import (
     HomePageConfig,
     ImageHome,
     ImageHomeThroughModel,
+    PageContent,
 )
 
 
@@ -98,28 +98,24 @@ class ImagesHeaderHomePageInlineAdmin(OrderedStackedInline):
             )
             return mark_safe(html)
 
-    # @admin.display(description="Editar")
-    # def get_change_url(self, obj):
-    #     image = obj.image
-    #     if image:
-    #         url = get_admin_url(image)
-    #         html = """
-    #             <a class="related-widget-wrapper-link change-related" title= alterar imagem {} href={}>
-    #                 <img src="/static/admin/img/icon-changelink.svg" alt="Modificar">
-    #             </a>
-    #         """.format(image.name, url)
-    #         return mark_safe(html)
-
     def get_fieldsets(self, request, obj):
         return ((None, {"fields": [("imagehome", "order"), "get_image"]}),)
 
 
-class HomePageConfigForm(forms.ModelForm):
+class PageContentAdminForm(forms.ModelForm):
     content = forms.CharField(label="Conteúdo", widget=CKEditorWidget())
-    body_content = forms.CharField(
-        label="Seção pastores", widget=CKEditorWidget()
-    )
 
+    class Meta:
+        model = PageContent
+        fields = "__all__"
+
+
+class PageContentInlineAdmin(admin.TabularInline):
+    model = PageContent
+    form = PageContentAdminForm
+
+
+class HomePageConfigForm(forms.ModelForm):
     class Meta:
         model = HomePageConfig
         fields = "__all__"
@@ -127,10 +123,13 @@ class HomePageConfigForm(forms.ModelForm):
 
 class HomePageConfigAdmin(OrderedInlineModelAdminMixin, admin.ModelAdmin):
     list_display = ["__str__", "active"]
-    # filter_horizontal = ["images"]
     form = HomePageConfigForm
 
-    inlines = [ImagesHeaderHomePageInlineAdmin, PastorConfigInlineAdmin]
+    inlines = [
+        ImagesHeaderHomePageInlineAdmin,
+        PastorConfigInlineAdmin,
+        PageContentInlineAdmin,
+    ]
     exclude = ["images"]
     list_filter = [
         filters.ChurchFilter,
@@ -144,6 +143,7 @@ class HomePageConfigAdmin(OrderedInlineModelAdminMixin, admin.ModelAdmin):
     def get_frame_maps(self, obj: HomePageConfig):
         if obj.maps_frame:
             return mark_safe(obj.maps_frame)
+        return " - "
 
 
 admin.site.register(HomePageConfig, HomePageConfigAdmin)
