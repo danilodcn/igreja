@@ -62,7 +62,7 @@ class PageConfig(models.Model):
         return PageContent.objects.filter(page_id=self.pk)
 
     @property
-    def church_body_sections(self):
+    def page_content_ministry(self):
         return ChurchBodySection.objects.filter(page_id=self.pk)
 
     @property

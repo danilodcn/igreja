@@ -6,16 +6,15 @@ from django.utils.safestring import mark_safe
 from ordered_model.admin import (
     OrderedInlineModelAdminMixin,
     OrderedStackedInline,
-    OrderedTabularInline,
 )
 
 from igreja.apps.core import filters
 
 from .models import (
     ChurchBodySection,
-    HomePageConfig,
     ImageHome,
-    ImageHomeThroughModel,
+    ImageThroughModel,
+    PageConfig,
     PageContent,
 )
 
@@ -24,16 +23,16 @@ class ImageHomeAdmin(admin.ModelAdmin):
     search_fields = ["name", "image"]
 
 
-class PastorConfigInlineForm(forms.ModelForm):
+class BodyConfigInlineForm(forms.ModelForm):
     content = forms.CharField(widget=CKEditorWidget())
 
     class Meta:
-        model = HomePageConfig
+        model = PageConfig
         fields = "__all__"
 
 
-class PastorConfigInlineAdmin(OrderedTabularInline):
-    form = PastorConfigInlineForm
+class BodyConfigInlineAdmin(OrderedStackedInline):
+    form = BodyConfigInlineForm
     model = ChurchBodySection
     extra = 0
     readonly_fields = (
@@ -44,17 +43,18 @@ class PastorConfigInlineAdmin(OrderedTabularInline):
     ordering = ("order",)
     fields = ["move_up_down_links", "name", "member_type", "content", "image"]
 
-    def get_fieldsets(self, request: HttpRequest, obj):
+    def get_fieldsets(self, request: HttpRequest, obj=...):
         fields = (
             (
                 None,
                 {
                     "fields": [
-                        "move_up_down_links",
-                        ("name", "member_type"),
-                        "content",
-                        "image",
-                        "get_image",
+                        ("name", "member_type", "move_up_down_links"),
+                        ("content",),
+                        (
+                            "image",
+                            "get_image",
+                        ),
                     ]
                 },
             ),
@@ -70,7 +70,7 @@ class PastorConfigInlineAdmin(OrderedTabularInline):
 
 class ImageForm(forms.ModelForm):
     class Meta:
-        model = ImageHomeThroughModel
+        model = ImageThroughModel
         exclude = []
 
     def __init__(self, *args, **kw):
@@ -78,28 +78,23 @@ class ImageForm(forms.ModelForm):
 
 
 class ImagesHeaderHomePageInlineAdmin(OrderedStackedInline):
-    model = ImageHomeThroughModel
-    # model.__str__ = lambda _: ""
-    # model._meta.verbose_name = "imagem"
-    # model._meta.verbose_name_plural = "imagens"
+    model = ImageThroughModel
     form = ImageForm
     extra = 0
-    autocomplete_fields = ["imagehome"]
+    autocomplete_fields = ["image"]
     readonly_fields = [
         "get_image",
     ]
-    fields = ["imagehome", "order"]
+    fields = ["image", "order"]
 
     @admin.display(description="imagem")
-    def get_image(self, obj=None):
+    def get_image(self, obj: ImageThroughModel = None):
         if obj:
-            html = """<img src={} height="200">""".format(
-                obj.imagehome.image.url
-            )
+            html = """<img src={} height="200">""".format(obj.image.image.url)
             return mark_safe(html)
 
     def get_fieldsets(self, request, obj):
-        return ((None, {"fields": [("imagehome", "order"), "get_image"]}),)
+        return ((None, {"fields": [("image", "order"), "get_image"]}),)
 
 
 class PageContentAdminForm(forms.ModelForm):
@@ -110,25 +105,38 @@ class PageContentAdminForm(forms.ModelForm):
         fields = "__all__"
 
 
-class PageContentInlineAdmin(admin.TabularInline):
+class PageContentInlineAdmin(admin.StackedInline):
     model = PageContent
     form = PageContentAdminForm
+    extra = 0
+
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": (
+                    ("title", "section"),
+                    ("content"),
+                )
+            },
+        )
+    ]
 
 
-class HomePageConfigForm(forms.ModelForm):
+class PageConfigForm(forms.ModelForm):
     class Meta:
-        model = HomePageConfig
+        model = PageConfig
         fields = "__all__"
 
 
-class HomePageConfigAdmin(OrderedInlineModelAdminMixin, admin.ModelAdmin):
-    list_display = ["__str__", "active"]
-    form = HomePageConfigForm
+class PageConfigAdmin(OrderedInlineModelAdminMixin, admin.ModelAdmin):
+    list_display = ["__str__", "church", "active"]
+    form = PageConfigForm
 
     inlines = [
-        ImagesHeaderHomePageInlineAdmin,
-        PastorConfigInlineAdmin,
         PageContentInlineAdmin,
+        ImagesHeaderHomePageInlineAdmin,
+        BodyConfigInlineAdmin,
     ]
     exclude = ["images"]
     list_filter = [
@@ -140,11 +148,11 @@ class HomePageConfigAdmin(OrderedInlineModelAdminMixin, admin.ModelAdmin):
     ]
 
     @admin.display(description="Localização")
-    def get_frame_maps(self, obj: HomePageConfig):
+    def get_frame_maps(self, obj: PageConfig):
         if obj.maps_frame:
             return mark_safe(obj.maps_frame)
         return " - "
 
 
-admin.site.register(HomePageConfig, HomePageConfigAdmin)
+admin.site.register(PageConfig, PageConfigAdmin)
 admin.site.register(ImageHome, ImageHomeAdmin)

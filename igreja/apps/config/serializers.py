@@ -12,10 +12,10 @@ class MemberTypeSerializer(serializers.ModelSerializer):
         exclude = ["created_at", "updated_at", "code"]
 
 
-class ImageHomeSerializer(serializers.ModelSerializer):
+class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ImageHome
-        exclude = []
+        exclude = ["id", "name", "order"]
 
 
 class ChurchBodySerializer(serializers.ModelSerializer):
@@ -23,22 +23,32 @@ class ChurchBodySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.ChurchBodySection
-        exclude = []
+        exclude = ["created_at", "updated_at"]
 
 
-class ImageHomeSerialiser(serializers.ModelSerializer):
-    imagehome = ImageHomeSerializer()
+class ImageSerialiser(serializers.ModelSerializer):
+    image = ImageSerializer()
 
     class Meta:
-        model = models.ImageHomeThroughModel
-        exclude = ["homepageconfig", "id"]
+        model = models.ImageThroughModel
+        exclude = ["id", "page", "order"]
 
 
-class PageHomeSerializer(serializers.ModelSerializer):
-    images = ImageHomeSerialiser(many=True)
-    body = ChurchBodySerializer(many=True, source="church_body_sections")
+class PageContentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.PageContent
+        exclude = ["page", "id", "created_at", "updated_at"]
+
+
+class BasePageSerializer(serializers.ModelSerializer):
+    images = ImageSerialiser(many=True)
+    sections = PageContentSerializer(many=True, source="content")
     church = ChurchDetailSerializer()
 
     class Meta:
-        model = models.HomePageConfig
-        exclude = []
+        model = models.PageConfig
+        exclude = ["created_at", "updated_at"]
+
+
+class PageIndexSerializer(BasePageSerializer):
+    body = ChurchBodySerializer(many=True, source="page_content_ministry")

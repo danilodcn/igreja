@@ -6,13 +6,13 @@ from . import models, serializers
 
 
 class ImageHomeViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = models.ImageHomeThroughModel.objects.all()
-    serializer_class = serializers.ImageHomeSerialiser
+    queryset = models.ImageThroughModel.objects.all()
+    serializer_class = serializers.ImageSerialiser
 
 
 class PageHomeViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = models.HomePageConfig.objects.all()
-    serializer_class = serializers.PageHomeSerializer
+    queryset = models.PageConfig.objects.all()
+    serializer_class = serializers.PageIndexSerializer
 
     def get_queryset(self):
         qs = super().get_queryset()
