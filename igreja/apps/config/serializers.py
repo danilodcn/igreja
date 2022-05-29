@@ -44,6 +44,7 @@ class BasePageSerializer(serializers.ModelSerializer):
     images = ImageSerialiser(many=True)
     sections = PageContentSerializer(many=True, source="content")
     church = ChurchDetailSerializer()
+    type_display = serializers.CharField(source="get_type_display")
 
     class Meta:
         model = models.PageConfig

@@ -17,6 +17,11 @@ class PageHomeViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         qs = super().get_queryset()
         church_id = self.request.query_params.get("church_id", "")
+        type = self.request.query_params.get("type", "")
+        
+        if type:
+            qs = qs.filter(type=type)
+
         # import ipdb; ipdb.set_trace()
         if not church_id:
             return qs.filter(church__is_default=True)
