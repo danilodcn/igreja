@@ -186,6 +186,14 @@ class ContactMeans(models.Model):
     type = models.PositiveSmallIntegerField("Tipo", choices=TYPES)
     contact = models.CharField("Contato", max_length=200)
     is_public = models.BooleanField("Público", default=False)
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        verbose_name="Usuário",
+        related_name="contact",
+        null=False,
+        blank=False,
+    )
 
     class Meta:
         verbose_name = "Forma de Contato"
@@ -222,12 +230,6 @@ class Profile(models.Model):
     )
     image = models.ImageField("Perfil", null=True, blank=True)
     biografy = models.TextField("Biografia", null=True, blank=True)
-    social_media = models.ManyToManyField(
-        ContactMeans,
-        related_name="profile",
-        verbose_name="Mídias Sociais",
-        blank=True,
-    )
     address = models.OneToOneField(
         Address,
         models.CASCADE,
