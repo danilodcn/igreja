@@ -2,8 +2,19 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.http import HttpRequest
 
-from igreja.apps.account.models import Address, CustomUser, Profile
+from igreja.apps.account.models import (
+    Address,
+    ContactMeans,
+    CustomUser,
+    Profile,
+)
 from igreja.apps.church.admin import MemberAminInline
+
+
+class ContactMeansInlineAdmin(admin.TabularInline):
+    search_fields = ["type", "contact"]
+    model = ContactMeans
+    extra = 0
 
 
 class AddressAdmin(admin.ModelAdmin):
@@ -23,7 +34,7 @@ class UserAdmin(UserAdmin):
     list_filter = [
         "groups",
     ]
-    inlines = [ProfileAdminInline, MemberAminInline]
+    inlines = [ProfileAdminInline, MemberAminInline, ContactMeansInlineAdmin]
     filter_horizontal = ["groups", "user_permissions"]
     search_fields = ["first_name", "last_name"]
 
