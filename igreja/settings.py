@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "ordered_model",
     "ckeditor",
     "ckeditor_uploader",
+    "image_optimizer",
     # My apps
     "igreja.apps.blog",
     "igreja.apps.account",
@@ -214,3 +215,5 @@ AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
 
 AWS_QUERYSTRING_EXPIRE = config("AWS_QUERYSTRING_EXPIRE", 24 * 60 * 60)
+
+OPTIMIZED_IMAGE_METHOD = "pillow"
