@@ -9,8 +9,8 @@ from igreja.apps.core.models import Image
 class ImageHome(Image):
     class Meta:
         ordering = ["order"]
-        verbose_name = "Imagem da página principal"
-        verbose_name = "Imagens da página principal"
+        verbose_name = "Imagem da página"
+        verbose_name = "Imagens das páginas"
 
 
 class PageConfig(models.Model):
@@ -43,8 +43,8 @@ class PageConfig(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = "Configuração da Página"
-        verbose_name_plural = "Configurações das Páginas"
+        verbose_name = "Página Inicial"
+        verbose_name_plural = "Páginas Iniciais"
 
     def __str__(self):
         return "{} - {} - {}".format(
@@ -174,31 +174,30 @@ class ChurchBodySection(ChurchMinistryAdnBodySection):
         blank=True,
     )
 
+    class Meta:
+        ordering = (
+            "page",
+            "order",
+        )
+        verbose_name = "Membro da Igreja"
+        verbose_name_plural = "Seções dos Membros da Igreja"
+
     def __str__(self) -> str:
         return "{} - {}".format(self.member_type or "Sem título", self.name)
 
 
-class MinistryChurch(ChurchMinistryAdnBodySection):
-    ...
-
-
-class ContactMeans(models.Model):
-    WHATSAPP = "whatsapp"
-    EMAIL = "email"
-    FACEBOOK = "facebook"
-    TYPES = (
-        (WHATSAPP, WHATSAPP),
-        (EMAIL, EMAIL),
-        (FACEBOOK, FACEBOOK),
-    )
-    type = models.CharField("Forma de contato", choices=TYPES, max_length=30)
-    contact = models.CharField("Contato", max_length=200)
-
-    ministry = models.ForeignKey(to=MinistryChurch, on_delete=models.CASCADE)
+class MinistryChurchSection(ChurchMinistryAdnBodySection):
+    class Meta:
+        ordering = (
+            "page",
+            "order",
+        )
+        verbose_name = "Ministério da Igreja"
+        verbose_name_plural = "Seções dos Ministérios da Igreja"
 
 
 class MinistryPageConfig(PageConfig):
     class Meta:
-        verbose_name = "Configuração da Página dos Ministérios"
-        verbose_name_plural = "Configurações da Páginas dos Ministérios"
+        verbose_name = "Página dos Ministérios"
+        verbose_name_plural = "Páginas dos Ministérios"
         proxy = True

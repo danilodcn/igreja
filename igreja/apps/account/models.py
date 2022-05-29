@@ -7,7 +7,6 @@ from igreja.apps.account.managers import CustomUserManager
 
 class CustomUser(AbstractUser):
     email = models.EmailField("Endereço de email", unique=True)
-    bio = models.TextField(null=True, blank=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -171,17 +170,39 @@ class Address(models.Model):
         )
 
 
+class ContactMeans(models.Model):
+    WHATSAPP = 1
+    EMAIL = 2
+    FACEBOOK = 3
+    INSTAGRAM = 4
+    PHONE = 5
+    TYPES = (
+        (WHATSAPP, "whatsapp"),
+        (EMAIL, "email"),
+        (FACEBOOK, "facebook"),
+        (INSTAGRAM, "instagram"),
+        (PHONE, "phone"),
+    )
+    type = models.PositiveSmallIntegerField("Tipo", choices=TYPES)
+    contact = models.CharField("Contato", max_length=200)
+    is_public = models.BooleanField("Público", default=False)
+
+    class Meta:
+        verbose_name = "Forma de Contato"
+        verbose_name_plural = "Formas de Contato"
+
+    def __str__(self) -> str:
+        default = "---"
+        return "{} - {}".format(
+            self.get_type_display() or default, self.contact or default
+        )
+
+
 class Profile(models.Model):
     GENDER_CHOICES = (
         (0, "Homem"),
         (1, "Mulher"),
         (2, "-"),
-    )
-
-    PHONE_CHOICES = (
-        ("residential", "RESIDENCIAL"),
-        ("commercial", "COMERCIAL"),
-        ("cellphone", "CELULAR"),
     )
 
     MARITAL_STATUS_CHOICES = (
@@ -200,6 +221,13 @@ class Profile(models.Model):
         null=True,
     )
     image = models.ImageField("Perfil", null=True, blank=True)
+    biografy = models.TextField("Biografia", null=True, blank=True)
+    social_media = models.ManyToManyField(
+        ContactMeans,
+        related_name="profile",
+        verbose_name="Mídias Sociais",
+        blank=True,
+    )
     address = models.OneToOneField(
         Address,
         models.CASCADE,
@@ -207,7 +235,6 @@ class Profile(models.Model):
         null=True,
         blank=True,
     )
-
     gender = models.IntegerField(
         verbose_name="Sexo",
         choices=GENDER_CHOICES,
@@ -215,7 +242,6 @@ class Profile(models.Model):
         blank=True,
         null=True,
     )
-
     cpf = models.CharField(
         max_length=14,
         verbose_name="CPF",
@@ -256,13 +282,6 @@ class Profile(models.Model):
         blank=True,
         null=True,
         verbose_name="Data de Nascimento",
-    )
-    phone_type = models.CharField(
-        max_length=100,
-        choices=PHONE_CHOICES,
-        verbose_name="Tipo de Telefone",
-        blank=True,
-        null=True,
     )
     marital_status = models.CharField(
         max_length=100,
