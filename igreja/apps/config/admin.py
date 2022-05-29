@@ -14,6 +14,8 @@ from .models import (
     ChurchBodySection,
     ImageHome,
     ImageThroughModel,
+    MinistryChurchSection,
+    MinistryPageConfig,
     PageConfig,
     PageContent,
 )
@@ -21,6 +23,9 @@ from .models import (
 
 class ImageHomeAdmin(admin.ModelAdmin):
     search_fields = ["name", "image"]
+
+    def has_module_permission(self, request: HttpRequest) -> bool:
+        return False
 
 
 class BodyConfigInlineForm(forms.ModelForm):
@@ -32,7 +37,6 @@ class BodyConfigInlineForm(forms.ModelForm):
 
 
 class BodyConfigInlineAdmin(OrderedStackedInline):
-    form = BodyConfigInlineForm
     model = ChurchBodySection
     extra = 0
     readonly_fields = (
@@ -41,7 +45,11 @@ class BodyConfigInlineAdmin(OrderedStackedInline):
         "get_image",
     )
     ordering = ("order",)
-    fields = ["move_up_down_links", "name", "member_type", "content", "image"]
+    fields_that_contain_diferences = ["member_type"]
+    fields = ["move_up_down_links", "name", "content", "image"]
+
+    def get_fields(self, request: HttpRequest, obj=...):
+        return set(self.fields).union(self.fields_that_contain_diferences)
 
     def get_fieldsets(self, request: HttpRequest, obj=...):
         fields = (
@@ -49,7 +57,11 @@ class BodyConfigInlineAdmin(OrderedStackedInline):
                 None,
                 {
                     "fields": [
-                        ("name", "member_type", "move_up_down_links"),
+                        (
+                            "name",
+                            *self.fields_that_contain_diferences,
+                            "move_up_down_links",
+                        ),
                         ("content",),
                         (
                             "image",
@@ -66,6 +78,11 @@ class BodyConfigInlineAdmin(OrderedStackedInline):
         if obj:
             html = """<img src={} height="200">""".format(obj.image.url)
             return mark_safe(html)
+
+
+class MinsterConfigSectionAdminInline(BodyConfigInlineAdmin):
+    model = MinistryChurchSection
+    fields_that_contain_diferences = ["ministry"]
 
 
 class ImageForm(forms.ModelForm):
@@ -132,7 +149,6 @@ class PageConfigForm(forms.ModelForm):
 class PageConfigAdmin(OrderedInlineModelAdminMixin, admin.ModelAdmin):
     list_display = ["__str__", "church", "active"]
     form = PageConfigForm
-
     inlines = [
         PageContentInlineAdmin,
         ImagesHeaderHomePageInlineAdmin,
@@ -143,9 +159,15 @@ class PageConfigAdmin(OrderedInlineModelAdminMixin, admin.ModelAdmin):
         filters.ChurchFilter,
         ("church__address__state", admin.AllValuesFieldListFilter),
     ]
-    readonly_fields = [
-        "get_frame_maps",
-    ]
+    page_type = PageConfig.INDEX
+
+    def get_readonly_fields(self, request: HttpRequest, obj: PageConfig):
+        if obj and obj.type == PageConfig.INDEX:
+            return [
+                "get_frame_maps",
+            ]
+        else:
+            return []
 
     @admin.display(description="Localização")
     def get_frame_maps(self, obj: PageConfig):
@@ -153,6 +175,19 @@ class PageConfigAdmin(OrderedInlineModelAdminMixin, admin.ModelAdmin):
             return mark_safe(obj.maps_frame)
         return " - "
 
+    def get_queryset(self, request: HttpRequest):
+        return super().get_queryset(request).filter(type=self.page_type)
+
+
+class MinistryPageConfigAdmin(PageConfigAdmin):
+    inlines = [
+        PageContentInlineAdmin,
+        ImagesHeaderHomePageInlineAdmin,
+    ]
+    exclude = ["get_frame_maps", "maps_frame"]
+    page_type = PageConfig.MINISTRY
+
 
 admin.site.register(PageConfig, PageConfigAdmin)
+admin.site.register(MinistryPageConfig, MinistryPageConfigAdmin)
 admin.site.register(ImageHome, ImageHomeAdmin)

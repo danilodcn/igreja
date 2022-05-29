@@ -1,7 +1,12 @@
+from ckeditor.widgets import CKEditorWidget
 from django import forms
 from django.contrib import admin
 
-from .models import Church, Member, MemberType
+from .models import Church, ChurchMinistry, Member, MemberType, Ministry
+
+
+class ContentForm(forms.ModelForm):
+    description = forms.CharField(widget=CKEditorWidget(), label="Descrição")
 
 
 class MemberAminInline(admin.TabularInline):
@@ -13,8 +18,18 @@ class MemberAminInline(admin.TabularInline):
 
 
 class MembrerTypeAdmin(admin.ModelAdmin):
+    form = ContentForm
     inlines = [MemberAminInline]
 
+    search_fields = ["name", "code"]
+
+
+class ChurchMinistryAdmin(admin.ModelAdmin):
+    form = ContentForm
+    search_fields = ["name", "code"]
+
+
+class MinistryAdmin(admin.ModelAdmin):
     search_fields = ["name", "code"]
 
 
@@ -50,4 +65,6 @@ class ChurchAdmin(admin.ModelAdmin):
 
 
 admin.site.register(MemberType, MembrerTypeAdmin)
+admin.site.register(ChurchMinistry, ChurchMinistryAdmin)
+admin.site.register(Ministry, MinistryAdmin)
 admin.site.register(Church, ChurchAdmin)
