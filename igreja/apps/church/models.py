@@ -1,12 +1,13 @@
+from ckeditor.fields import RichTextField
 from django.db import models
 from ordered_model.models import OrderedModel
 
 from igreja.apps.account.models import Address, CustomUser
 
 
-class MemberType(OrderedModel):
+class AbstractChurchMemberTypeAndMinister(OrderedModel):
     name = models.CharField("Nome", max_length=100, null=True, blank=True)
-    description = models.TextField("Descrição", null=True, blank=True)
+    description = RichTextField("Descrição", null=True, blank=True)
     code = models.CharField(
         "Código",
         max_length=30,
@@ -18,12 +19,25 @@ class MemberType(OrderedModel):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = "church_member_type"
+        abstract = True
         verbose_name = "Tipo de membro"
         verbose_name_plural = "Tipos de membros"
 
     def __str__(self) -> str:
         return self.name or " - "
+
+
+class MemberType(AbstractChurchMemberTypeAndMinister):
+    class Meta:
+        db_table = "church_member_type"
+        verbose_name = "Tipo de membro"
+        verbose_name_plural = "Tipos de membros"
+
+
+class ChurchMinistry(AbstractChurchMemberTypeAndMinister):
+    class Meta:
+        verbose_name = "Ministério da Igreja"
+        verbose_name_plural = "Ministérios da Igreja"
 
 
 class Church(models.Model):
@@ -58,11 +72,17 @@ class Church(models.Model):
 
 class Ministry(models.Model):
     leader = models.ForeignKey(
-        CustomUser, models.CASCADE, verbose_name="Líder"
+        CustomUser, models.CASCADE, verbose_name="Líder", null=True, blank=True
     )
-    name = models.CharField("Nome", max_length=100, null=True, blank=True)
+    name = models.CharField(
+        "Nome do lider", max_length=100, null=True, blank=True
+    )
     church = models.ForeignKey(Church, models.CASCADE, verbose_name="Igreja")
-    description = models.TextField("Descrição", null=True, blank=True)
+    ministry = models.ForeignKey(
+        ChurchMinistry,
+        models.CASCADE,
+        verbose_name="Ministério da Igreja",
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
