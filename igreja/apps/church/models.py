@@ -56,6 +56,25 @@ class Church(models.Model):
         return self.name or " - "
 
 
+class Ministry(models.Model):
+    leader = models.ForeignKey(
+        CustomUser, models.CASCADE, verbose_name="Líder"
+    )
+    name = models.CharField("Nome", max_length=100, null=True, blank=True)
+    church = models.ForeignKey(Church, models.CASCADE, verbose_name="Igreja")
+    description = models.TextField("Descrição", null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Minstério"
+        verbose_name_plural = "Ministérios"
+
+    def __str__(self) -> str:
+        return "{} {}".format(self.church, self.leader)
+
+
 class Member(models.Model):
     member = models.ForeignKey(
         CustomUser,

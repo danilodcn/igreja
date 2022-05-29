@@ -2,7 +2,7 @@ from ckeditor.fields import RichTextField
 from django.db import models, transaction
 from ordered_model.models import OrderedModel
 
-from igreja.apps.church.models import Church, MemberType
+from igreja.apps.church.models import Church, MemberType, Ministry
 from igreja.apps.core.models import Image
 
 
@@ -187,6 +187,14 @@ class ChurchBodySection(ChurchMinistryAdnBodySection):
 
 
 class MinistryChurchSection(ChurchMinistryAdnBodySection):
+    ministry = models.ForeignKey(
+        Ministry,
+        on_delete=models.SET_NULL,
+        verbose_name="Ministério",
+        null=True,
+        blank=False,
+    )
+
     class Meta:
         ordering = (
             "page",
