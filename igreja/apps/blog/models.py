@@ -1,6 +1,7 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from image_optimizer.fields import OptimizedImageField
 from ordered_model.models import OrderedModel
 
 from igreja.apps.account.models import CustomUser
@@ -47,7 +48,12 @@ class Post(models.Model):
         verbose_name="Subtítulo", max_length=255, blank=True
     )
     slug = models.SlugField(verbose_name="Slug", max_length=255, unique=True)
-    image = models.ImageField(verbose_name="Imagem", null=True, blank=True)
+    image = OptimizedImageField(
+        verbose_name="Imagem",
+        optimized_image_resize_method="cover",
+        null=True,
+        blank=True,
+    )
     document = models.FileField("Documento", null=True, blank=True)
     resume = models.TextField(
         "Resumo",

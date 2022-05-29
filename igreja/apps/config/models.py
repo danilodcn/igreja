@@ -13,7 +13,18 @@ class ImageHome(Image):
         verbose_name = "Imagens da página principal"
 
 
-class HomePageConfig(models.Model):
+class PageConfig(models.Model):
+    INDEX = 1
+    MINISTRY = 2
+    PAGE_TYPES = (
+        (INDEX, "Página principal"),
+        (MINISTRY, "Ministérios"),
+    )
+    type = models.PositiveSmallIntegerField(
+        "Tipo de página",
+        choices=PAGE_TYPES,
+        help_text="Tipo de página",
+    )
     church = models.ForeignKey(
         Church,
         on_delete=models.SET_NULL,
@@ -28,22 +39,27 @@ class HomePageConfig(models.Model):
     maps_frame = models.TextField(
         verbose_name="Iframe do Google Maps", null=True, blank=True
     )
-    # images = models.ManyToManyField(
-    #     ImageHome, through='ImageHomeThroughModel', blank=True
-    # )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = "Configuração da Página Principal"
-        verbose_name_plural = "Configurações da Página Principal"
+        verbose_name = "Configuração da Página"
+        verbose_name_plural = "Configurações das Páginas"
 
     def __str__(self):
-        return "{} - {}".format(
-            self.pk, self.church or "Nenhuma igreja cadastrada"
+        return "{} - {} - {}".format(
+            self.pk,
+            self.get_type_display(),
+            self.church or "Nenhuma igreja cadastrada",
         )
 
     @property
     def images(self):
-        return ImageHomeThroughModel.objects.filter(homepageconfig_id=self.pk)
+        return ImageThroughModel.objects.filter(page_id=self.pk)
+
+    @property
+    def content(self):
+        return PageContent.objects.filter(page_id=self.pk)
 
     @property
     def church_body_sections(self):
@@ -63,47 +79,28 @@ class HomePageConfig(models.Model):
         update_fields=None,
     ) -> None:
         self.sure_only_active_church_home_config()
-        self.sure_range_image_order()
+        # self.sure_range_image_order()
+        self.sure_in_order(self.images, "order")
+        self.sure_in_order(self.content, "section")
         return super().save(force_insert, force_update, using, update_fields)
 
     def sure_only_active_church_home_config(self):
-        qs = HomePageConfig.objects.filter(church=self.church, active=True)
+        qs = PageConfig.objects.filter(church=self.church, active=True)
 
         if self.active:
             qs.exclude(pk=self.pk).update(active=False)
 
-    def sure_range_image_order(self):
-        qs = self.images.all()
+    def sure_in_order(self, qs: models.QuerySet, field: str):
         with transaction.atomic():
-            for i, image in enumerate(qs, start=1):
-                image.order = i
-                image.save()
+            for i, obj in enumerate(qs, start=1):
+                setattr(obj, field, i)
+                obj.save()
 
 
 class PageContent(models.Model):
-    INDEX = 1
-    MINISTRY = 2
-    PAGE_TYPES = (
-        (INDEX, "Página principal"),
-        (MINISTRY, "Ministérios"),
-    )
-
-    BODY_SECTIONS = 10
-    MINISTRY_SECTIONS = 11
-    SECTIONS_TYPES = (
-        (BODY_SECTIONS, "Seção dos pastores"),
-        (MINISTRY_SECTIONS, "Seção dos ministérios"),
-    )
-
-    page_type = models.PositiveSmallIntegerField(
-        "Tipo de página",
-        choices=PAGE_TYPES,
-        help_text="Tipo de página",
-    )
-    content_type = models.PositiveSmallIntegerField(
-        "Tipo de conteúdo",
-        choices=SECTIONS_TYPES,
-        help_text="Tipo de conteúdo",
+    section = models.PositiveSmallIntegerField(
+        "Número da seção",
+        help_text="As seções serão apresentadas em ordem decrescente",
     )
     title = models.CharField(
         "Título",
@@ -114,21 +111,24 @@ class PageContent(models.Model):
     )
     content = RichTextField(verbose_name="Conteúdo", null=True, blank=True)
     page = models.ForeignKey(
-        HomePageConfig,
+        PageConfig,
         on_delete=models.CASCADE,
     )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = "Conteúdo da Página"
         verbose_name_plural = "Conteúdos da Página"
-        ordering = ["page_type", "content_type"]
+        ordering = ["section"]
+
+    def __str__(self) -> str:
+        return "{} - {}".format(self.section, self.title)
 
 
-class ImageHomeThroughModel(OrderedModel):
-    imagehome = models.ForeignKey(ImageHome, on_delete=models.CASCADE)
-    homepageconfig = models.ForeignKey(
-        HomePageConfig, on_delete=models.CASCADE
-    )
+class ImageThroughModel(OrderedModel):
+    image = models.ForeignKey(ImageHome, on_delete=models.CASCADE)
+    page = models.ForeignKey(PageConfig, on_delete=models.CASCADE)
     order = models.PositiveIntegerField("Ordem", null=True, blank=True)
 
     class Meta:
@@ -137,7 +137,7 @@ class ImageHomeThroughModel(OrderedModel):
         verbose_name_plural = "Imagens"
 
     def __str__(self) -> str:
-        name = self.imagehome.get_image_name()
+        name = self.image.get_image_name()
         return "{} - {}".format(self.order, name)
 
 
@@ -149,9 +149,11 @@ class ChurchMinistryAdnBodySection(OrderedModel):
     content = models.TextField("Texto", null=True, blank=True)
 
     page = models.ForeignKey(
-        HomePageConfig,
+        PageConfig,
         on_delete=models.CASCADE,
     )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     order_with_respect_to = "page"
 
@@ -195,7 +197,7 @@ class ContactMeans(models.Model):
     ministry = models.ForeignKey(to=MinistryChurch, on_delete=models.CASCADE)
 
 
-class MinistryPageConfig(HomePageConfig):
+class MinistryPageConfig(PageConfig):
     class Meta:
         verbose_name = "Configuração da Página dos Ministérios"
         verbose_name_plural = "Configurações da Páginas dos Ministérios"
