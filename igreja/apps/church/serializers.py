@@ -13,3 +13,17 @@ class ChurchSerializer(serializers.ModelSerializer):
 
 class ChurchDetailSerializer(ChurchSerializer):
     address = AdressSerializer()
+
+
+class ChurchMinisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ChurchMinistry
+        exclude = ["created_at", "updated_at"]
+
+
+class MinisterSerializer(serializers.ModelSerializer):
+    ministry = ChurchMinisterSerializer()
+
+    class Meta:
+        model = models.Ministry
+        exclude = ["created_at", "updated_at"]

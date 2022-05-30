@@ -15,7 +15,6 @@ from .models import (
     ImageHome,
     ImageThroughModel,
     MinistryChurchSection,
-    MinistryPageConfig,
     PageConfig,
     PageContent,
 )
@@ -37,6 +36,7 @@ class BodyConfigInlineForm(forms.ModelForm):
 
 
 class BodyConfigInlineAdmin(OrderedStackedInline):
+    form = BodyConfigInlineForm
     model = ChurchBodySection
     extra = 0
     readonly_fields = (
@@ -147,17 +147,19 @@ class PageConfigForm(forms.ModelForm):
 
 
 class PageConfigAdmin(OrderedInlineModelAdminMixin, admin.ModelAdmin):
-    list_display = ["__str__", "church", "active"]
+    list_display = ["__str__", "type", "church", "active"]
     form = PageConfigForm
     inlines = [
         PageContentInlineAdmin,
         ImagesHeaderHomePageInlineAdmin,
         BodyConfigInlineAdmin,
+        MinsterConfigSectionAdminInline,
     ]
     exclude = ["images"]
     list_filter = [
+        filters.TypePageConfigFilter,
         filters.ChurchFilter,
-        ("church__address__state", admin.AllValuesFieldListFilter),
+        # ("church__address__state", admin.AllValuesFieldListFilter),
     ]
     page_type = PageConfig.INDEX
 
@@ -175,19 +177,6 @@ class PageConfigAdmin(OrderedInlineModelAdminMixin, admin.ModelAdmin):
             return mark_safe(obj.maps_frame)
         return " - "
 
-    def get_queryset(self, request: HttpRequest):
-        return super().get_queryset(request).filter(type=self.page_type)
-
-
-class MinistryPageConfigAdmin(PageConfigAdmin):
-    inlines = [
-        PageContentInlineAdmin,
-        ImagesHeaderHomePageInlineAdmin,
-    ]
-    exclude = ["get_frame_maps", "maps_frame"]
-    page_type = PageConfig.MINISTRY
-
 
 admin.site.register(PageConfig, PageConfigAdmin)
-admin.site.register(MinistryPageConfig, MinistryPageConfigAdmin)
 admin.site.register(ImageHome, ImageHomeAdmin)

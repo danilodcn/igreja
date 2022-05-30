@@ -12,13 +12,13 @@ class ImageHomeViewSet(viewsets.ReadOnlyModelViewSet):
 
 class PageHomeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.PageConfig.objects.all()
-    serializer_class = serializers.PageIndexSerializer
+    serializer_class = serializers.PageConfigSerializer
 
     def get_queryset(self):
         qs = super().get_queryset()
         church_id = self.request.query_params.get("church_id", "")
         type = self.request.query_params.get("type", "")
-        
+
         if type:
             qs = qs.filter(type=type)
 

@@ -3,9 +3,11 @@ from django_admin_multiple_choice_list_filter.list_filters import (
     MultipleChoiceListFilter,
 )
 
+from .utils import get_field_display
+
 
 class ChurchFilter(MultipleChoiceListFilter):
-    title = "Church"
+    title = "Igreja"
     parameter_name = "church_id__in"
 
     def lookups(self, request, model_admin):
@@ -17,4 +19,21 @@ class ChurchFilter(MultipleChoiceListFilter):
             .order_by("-total")
         ):
             if count:
+                yield (pk, f"{name} ({count})")
+
+
+class TypePageConfigFilter(MultipleChoiceListFilter):
+    title = "Tipo de Página"
+    parameter_name = "type__in"
+
+    def lookups(self, request, model_admin):
+        PAGE_TYPES = model_admin.model.PAGE_TYPES
+        qs = model_admin.get_queryset(request)
+        for pk, type, count in (
+            qs.values_list("pk", "type")
+            .annotate(total=Count("type"))
+            .order_by("-total")
+        ):
+            if count:
+                name = get_field_display(PAGE_TYPES, type)
                 yield (pk, f"{name} ({count})")

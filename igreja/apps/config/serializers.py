@@ -1,7 +1,10 @@
 from rest_framework import serializers
 
 from igreja.apps.church.models import MemberType
-from igreja.apps.church.serializers import ChurchDetailSerializer
+from igreja.apps.church.serializers import (
+    ChurchDetailSerializer,
+    MinisterSerializer,
+)
 
 from . import models
 
@@ -26,6 +29,14 @@ class ChurchBodySerializer(serializers.ModelSerializer):
         exclude = ["created_at", "updated_at"]
 
 
+class MinistryChurchSectionSerializer(serializers.ModelSerializer):
+    ministry = MinisterSerializer()
+
+    class Meta:
+        model = models.MinistryChurchSection
+        exclude = ["created_at", "updated_at"]
+
+
 class ImageSerialiser(serializers.ModelSerializer):
     image = ImageSerializer()
 
@@ -40,16 +51,16 @@ class PageContentSerializer(serializers.ModelSerializer):
         exclude = ["page", "id", "created_at", "updated_at"]
 
 
-class BasePageSerializer(serializers.ModelSerializer):
+class PageConfigSerializer(serializers.ModelSerializer):
     images = ImageSerialiser(many=True)
-    sections = PageContentSerializer(many=True, source="content")
     church = ChurchDetailSerializer()
     type_display = serializers.CharField(source="get_type_display")
+    sections = PageContentSerializer(many=True, source="content")
+    body = ChurchBodySerializer(many=True, source="body_page_sections")
+    ministry = MinistryChurchSectionSerializer(
+        many=True, source="ministry_page_sections"
+    )
 
     class Meta:
         model = models.PageConfig
         exclude = ["created_at", "updated_at"]
-
-
-class PageIndexSerializer(BasePageSerializer):
-    body = ChurchBodySerializer(many=True, source="page_content_ministry")
