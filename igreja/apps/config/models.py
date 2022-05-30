@@ -25,6 +25,13 @@ class PageConfig(models.Model):
         choices=PAGE_TYPES,
         help_text="Tipo de página",
     )
+    title = models.CharField(
+        "Título",
+        max_length=200,
+        help_text="título da página",
+        null=False,
+        blank=False,
+    )
     church = models.ForeignKey(
         Church,
         on_delete=models.SET_NULL,
@@ -35,22 +42,22 @@ class PageConfig(models.Model):
         blank=True,
     )
     active = models.BooleanField("Ativa", default=False)
-
     maps_frame = models.TextField(
         verbose_name="Iframe do Google Maps", null=True, blank=True
     )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = "Página Inicial"
-        verbose_name_plural = "Páginas Iniciais"
+        verbose_name = "Página"
+        verbose_name_plural = "Páginas"
 
     def __str__(self):
         return "{} - {} - {}".format(
             self.pk,
-            self.get_type_display(),
             self.church or "Nenhuma igreja cadastrada",
+            self.title,
         )
 
     @property
@@ -62,14 +69,12 @@ class PageConfig(models.Model):
         return PageContent.objects.filter(page_id=self.pk)
 
     @property
-    def page_content_ministry(self):
+    def body_page_sections(self):
         return ChurchBodySection.objects.filter(page_id=self.pk)
 
     @property
-    def page_content_index(self):
-        return PageContent.objects.filter(
-            page_id=self.pk, page_type=PageContent.INDEX
-        )
+    def ministry_page_sections(self):
+        return MinistryChurchSection.objects.filter(page_id=self.pk)
 
     def save(
         self,
@@ -202,10 +207,3 @@ class MinistryChurchSection(ChurchMinistryAdnBodySection):
         )
         verbose_name = "Ministério da Igreja"
         verbose_name_plural = "Seções dos Ministérios da Igreja"
-
-
-class MinistryPageConfig(PageConfig):
-    class Meta:
-        verbose_name = "Página dos Ministérios"
-        verbose_name_plural = "Páginas dos Ministérios"
-        proxy = True
