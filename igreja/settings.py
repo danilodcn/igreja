@@ -34,9 +34,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django_admin_multiple_choice_list_filter",
     # Apps
-    "cloudinary_storage",
     "django.contrib.staticfiles",
-    "cloudinary",
     "rest_framework",
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
@@ -216,19 +214,10 @@ sentry_sdk.init(
 
 # AWS config
 
-# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-# AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
-# AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
-# AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
 
-# AWS_QUERYSTRING_EXPIRE = config("AWS_QUERYSTRING_EXPIRE", 24 * 60 * 60)
+AWS_QUERYSTRING_EXPIRE = config("AWS_QUERYSTRING_EXPIRE", 24 * 60 * 60)
 
-DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
-
-CLOUDINARY_STORAGE = {
-    "CLOUD_NAME": config("CLOUDINARY_CLOUD_NAME"),
-    "API_KEY": config("CLOUDINARY_API_KEY"),
-    "API_SECRET": config("CLOUDINARY_API_SECRET"),
-}
-
-OPTIMIZED_IMAGE_METHOD = "pillow"
