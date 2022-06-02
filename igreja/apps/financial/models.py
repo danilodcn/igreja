@@ -51,7 +51,7 @@ class Payment(models.Model):
 
     amount = models.DecimalField("Valor", max_digits=20, decimal_places=2)
 
-    number_of_installments = models.IntegerField(
+    number_of_installments = models.PositiveIntegerField(
         "Quantidade de parcelas", null=True, blank=True
     )
     date_of_payment = models.DateTimeField("Data de pagamento", null=True)

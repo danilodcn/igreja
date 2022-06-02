@@ -74,6 +74,9 @@ class EventPaymentOption(OrderedModel):
         to=Event, on_delete=models.CASCADE, related_name="payment_options"
     )
     amount = models.DecimalField("Valor", max_digits=20, decimal_places=2)
+    max_installment = models.PositiveIntegerField(
+        "Numero máximo de parcelas", null=True, blank=True
+    )
     description = models.TextField("Descrição")
 
     class Meta:
