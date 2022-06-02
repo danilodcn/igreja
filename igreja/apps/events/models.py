@@ -24,12 +24,13 @@ class Category(OrderedModel):
         ordering = ["order"]
 
 
-class Events(models.Model):
+class Event(models.Model):
     title = models.CharField(
         verbose_name="Título", max_length=255, unique=True
     )
-    active = models.BooleanField("Ativo", default=False)
     slug = models.SlugField(verbose_name="Slug", max_length=255, unique=True)
+    active = models.BooleanField("Ativo", default=False)
+    is_subscriptable = models.BooleanField("Aceita inscrições")
 
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True, blank=False
@@ -68,9 +69,9 @@ class Events(models.Model):
         ordering = ["initial_date"]
 
 
-class EventPaymentOptions(OrderedModel):
+class EventPaymentOption(OrderedModel):
     event = models.ForeignKey(
-        to=Events, on_delete=models.CASCADE, related_name="payment_options"
+        to=Event, on_delete=models.CASCADE, related_name="payment_options"
     )
     amount = models.DecimalField("Valor", max_digits=20, decimal_places=2)
     description = models.TextField("Descrição")
@@ -83,7 +84,7 @@ class EventPaymentOptions(OrderedModel):
 
 class Subscription(models.Model):
     event = models.ForeignKey(
-        to=Events, on_delete=models.CASCADE, related_name="payment_options"
+        to=Event, on_delete=models.CASCADE, related_name="subscriptions"
     )
     payment = models.ForeignKey(
         Payment, on_delete=models.SET_NULL, null=True, blank=True
