@@ -6,7 +6,7 @@ from igreja.apps.church.serializers import (
     MinisterSerializer,
 )
 
-from . import models
+from .models import pages
 
 
 class MemberTypeSerializer(serializers.ModelSerializer):
@@ -17,7 +17,7 @@ class MemberTypeSerializer(serializers.ModelSerializer):
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.ImageHome
+        model = pages.ImageHome
         exclude = ["id", "name", "order"]
 
 
@@ -25,7 +25,7 @@ class ChurchBodySerializer(serializers.ModelSerializer):
     member_type = MemberTypeSerializer()
 
     class Meta:
-        model = models.ChurchBodySection
+        model = pages.ChurchBodySection
         exclude = ["created_at", "updated_at"]
 
 
@@ -33,7 +33,7 @@ class MinistryChurchSectionSerializer(serializers.ModelSerializer):
     ministry = MinisterSerializer()
 
     class Meta:
-        model = models.MinistryChurchSection
+        model = pages.MinistryChurchSection
         exclude = ["created_at", "updated_at"]
 
 
@@ -41,13 +41,13 @@ class ImageSerialiser(serializers.ModelSerializer):
     image = ImageSerializer()
 
     class Meta:
-        model = models.ImageThroughModel
+        model = pages.ImageThroughModel
         exclude = ["id", "page", "order"]
 
 
 class PageContentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.PageContent
+        model = pages.PageContent
         exclude = ["page", "id", "created_at", "updated_at"]
 
 
@@ -62,5 +62,5 @@ class PageConfigSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = models.PageConfig
+        model = pages.PageConfig
         exclude = ["created_at", "updated_at"]

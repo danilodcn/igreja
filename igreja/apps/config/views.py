@@ -2,16 +2,17 @@ from rest_framework import status, viewsets
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from . import models, serializers
+from . import serializers
+from .models import pages
 
 
 class ImageHomeViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = models.ImageThroughModel.objects.all()
+    queryset = pages.ImageThroughModel.objects.all()
     serializer_class = serializers.ImageSerialiser
 
 
 class PageHomeViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = models.PageConfig.objects.all()
+    queryset = pages.PageConfig.objects.all()
     serializer_class = serializers.PageConfigSerializer
 
     def get_queryset(self):
@@ -22,7 +23,6 @@ class PageHomeViewSet(viewsets.ReadOnlyModelViewSet):
         if type:
             qs = qs.filter(type=type)
 
-        # import ipdb; ipdb.set_trace()
         if not church_id:
             return qs.filter(church__is_default=True)
 

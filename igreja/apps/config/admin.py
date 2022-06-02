@@ -10,7 +10,7 @@ from ordered_model.admin import (
 
 from igreja.apps.core import filters
 
-from .models import (
+from .models.pages import (
     ChurchBodySection,
     ImageHome,
     ImageThroughModel,
