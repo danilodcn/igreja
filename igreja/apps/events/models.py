@@ -29,19 +29,32 @@ class Event(models.Model):
         verbose_name="Título", max_length=255, unique=True
     )
     slug = models.SlugField(verbose_name="Slug", max_length=255, unique=True)
+
     active = models.BooleanField("Ativo", default=False)
     is_subscriptable = models.BooleanField("Aceita inscrições")
 
     category = models.ForeignKey(
-        Category, on_delete=models.SET_NULL, null=True, blank=False
+        Category,
+        on_delete=models.SET_NULL,
+        verbose_name="Categoria",
+        null=True,
+        blank=False,
     )
     initial_date = models.DateTimeField(verbose_name="Inicio")
-    end_date = models.DateTimeField(verbose_name="Inicio")
+    end_date = models.DateTimeField(verbose_name="Fim")
     church = models.ForeignKey(
-        to=Church, on_delete=models.SET_NULL, null=True, blank=False
+        to=Church,
+        on_delete=models.SET_NULL,
+        verbose_name="Igreja",
+        null=True,
+        blank=False,
     )
     address = models.ForeignKey(
-        to=Address, on_delete=models.SET_NULL, null=True, blank=False
+        to=Address,
+        on_delete=models.SET_NULL,
+        verbose_name="Endereço",
+        null=True,
+        blank=True,
     )
     image = OptimizedImageField(
         verbose_name="Imagem",
@@ -87,10 +100,17 @@ class EventPaymentOption(OrderedModel):
 
 class Subscription(models.Model):
     event = models.ForeignKey(
-        to=Event, on_delete=models.CASCADE, related_name="subscriptions"
+        to=Event,
+        on_delete=models.CASCADE,
+        related_name="subscriptions",
+        verbose_name="Evento",
     )
     payment = models.ForeignKey(
-        Payment, on_delete=models.SET_NULL, null=True, blank=True
+        Payment,
+        on_delete=models.SET_NULL,
+        verbose_name="Pagamento",
+        null=True,
+        blank=True,
     )
     user = models.ForeignKey(
         verbose_name="Usuário",
@@ -101,7 +121,7 @@ class Subscription(models.Model):
         blank=True,
     )
     updated_by = models.ForeignKey(
-        verbose_name="Usuário",
+        verbose_name="Atualizado por",
         to=CustomUser,
         on_delete=models.SET_NULL,
         null=True,

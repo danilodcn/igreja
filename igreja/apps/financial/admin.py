@@ -9,6 +9,7 @@ class InstallmentInline(admin.TabularInline):
 
 class PaymentAdmin(admin.ModelAdmin):
     inlines = [InstallmentInline]
+    search_fields = ["type", "brand", "pk"]
 
 
 admin.site.register(Payment, PaymentAdmin)
