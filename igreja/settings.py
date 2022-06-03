@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     "igreja.apps.core",
     # "igreja.apps.content",
     "igreja.apps.church",
+    "igreja.apps.events",
+    "igreja.apps.financial",
     "igreja.apps.config",
 ]
 
