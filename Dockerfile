@@ -15,7 +15,7 @@ RUN apk update
 RUN apk add --no-cache busybox-extras bash \
     openssh jpeg-dev postgresql-dev \
     postgresql-dev gcc musl-dev \
-    alpine-sdk libffi-dev libcurl curl-dev
+    alpine-sdk libffi-dev libcurl curl-dev git
 
 RUN apk add --virtual .build-deps
 
