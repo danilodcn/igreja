@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from rest_framework import viewsets
 
-# Create your views here.
+from . import models
+
+
+class ChurchViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = models.Church.objects.filter(active=True).order_by("is_default")
+    # serializer_class = serializers.ChurchSerializer
