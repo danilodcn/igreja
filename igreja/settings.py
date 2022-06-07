@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     # Apps
     "django.contrib.staticfiles",
     "rest_framework",
+    "oauth2_provider",
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
     "django_filters",
@@ -95,6 +96,11 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_FILTER_BACKENDS": (
         "django_filters.rest_framework.DjangoFilterBackend",
+    ),
+}
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "oauth2_provider.contrib.rest_framework.OAuth2Authentication",
     ),
 }
 
