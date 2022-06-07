@@ -26,3 +26,6 @@ lint:
 	@echo "Linting"
 	isort .
 	black .
+
+tests:
+	# - python -m unittest discover -s tests -v
