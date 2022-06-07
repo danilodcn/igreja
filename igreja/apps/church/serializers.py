@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from igreja.apps.account.serializers import AdressSerializer
+from igreja.apps.account.serializers import AddressSerializer
 
 from . import models
 
@@ -12,7 +12,7 @@ class ChurchSerializer(serializers.ModelSerializer):
 
 
 class ChurchDetailSerializer(ChurchSerializer):
-    address = AdressSerializer()
+    address = AddressSerializer()
 
 
 class ChurchMinisterSerializer(serializers.ModelSerializer):

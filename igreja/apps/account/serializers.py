@@ -4,7 +4,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import Address, CustomUser
 
 
-class AdressSerializer(serializers.ModelSerializer):
+class AddressSerializer(serializers.ModelSerializer):
     address_type = serializers.CharField(source="get_address_type_display")
 
     class Meta:
